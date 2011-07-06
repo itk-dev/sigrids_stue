@@ -1,0 +1,158 @@
+/* ----- / Colors ----- */
+@linkcolor: #a500a5;
+@linkcolor-visited: #ff99ff;
+@linkcolor-hover: #a500a5;
+@linkcolor-active: #ff99ff;
+
+/* ----- / Basic typography ----- */
+@fontsize-default: 13px;
+@fontsize-secondary: 12px;
+
+@lineheight-default: 18px;
+@lineheight-secondary: 16px;
+
+.text-shadow(@param) {
+  -webkit-text-shadow: @param;
+  -moz-text-shadow: @param;
+  text-shadow: @param;
+}
+
+body {
+  font: @fontsize-default Arial,sans-serif;
+  line-height: @lineheight-default;
+  color: #000;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+  color: #000;
+  font-size: @fontsize-default * 1.9;
+}
+
+h2 {
+  font-size: @fontsize-default * 1.4;
+  color: #000;
+}
+
+p {
+  margin-bottom: 0.6em;
+}
+
+/* ----- / Forms ----- */
+
+input[type="text"], input[type="password"] {
+  border-top: 1px solid #dadada;
+  border-right: 1px solid #dadada;
+  border-bottom: 1px solid #cecece;
+  border-left: 1px solid #cecece;
+  font-size: @fontsize-default * 1;
+}
+
+input[type="submit"] {
+  background-color: #e5f0f3;
+  border: 1px solid #bccdd2;
+  color: #666;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+/* ----- / Links ----- */
+
+a,
+a:link {
+  color: @linkcolor;
+  text-decoration: none;
+}
+
+a:visited {
+  color: @linkcolor-visited;
+}
+
+a:hover,
+a:focus &
+
+a:active {
+  color: @linkcolor-active;
+}
+
+li a.active {
+  color: @linkcolor;
+}
+
+/* ----- / Node ----- */
+.node .content a:link {
+  border: 0;
+}
+
+/* ----- / Menus ----- */
+
+#left .menu li a,
+#left .menu li li.first a,
+#left .menu li.first.active-trail.active a {
+  background: url('../images/black-bg-75.png');
+  background: rgba(0,0,0,.75);
+  border: 0;
+}
+
+.menu-block ul li a {
+  color: #fff;
+  font: @fontsize-default * 1.4 "Helvetica Neue",Arial,sans-serif;
+}
+
+.menu-block ul li a.active,
+.menu-block ul li a.active-trail {
+  color: #fff;
+}
+
+.menu-block ul li a:hover,
+.menu-block ul li a:focus {
+  text-decoration: none;
+}
+
+.menu-block ul li a.active:hover,
+.menu-block ul li a.active-trail:hover {
+  background-color: #000;
+}
+
+.menu-block ul li a:active {
+}
+
+#main-menu a {
+  line-height: 100%;
+}
+
+/* !----- / Secondary menu ----- */
+
+#block-menu-secondary-links ul li a {
+  color: #fff;
+}
+
+#block-menu-secondary-links ul li a:hover {
+  border: 0;
+  color: #fff;
+}
+
+/* !----- / Spotboxes ----- */
+
+.nodespotbox h3 {
+  font-size: @fontsize-default * 1.1;
+  line-height: @lineheight-default * 1.1;
+}
+
+.nodespotbox .content-wrapper .link a {
+  line-height: @lineheight-default * 1;
+}
+
+.nodespotbox .content-wrapper .link a:visited {
+  color: @linkcolor-visited;
+}
+
+.nodespotbox .content-wrapper .link a:hover {
+  border: 0;
+  color: @linkcolor-hover;
+  text-decoration: none;
+}
+
+.nodespotbox .content-wrapper .link a:active {
+  color: @linkcolor-active;
+}
