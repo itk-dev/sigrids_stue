@@ -1,15 +1,16 @@
 /* ----- / Colors ----- */
 @linkcolor: #a500a5;
-@linkcolor-visited: #ff99ff;
+@linkcolor-visited: #6C006C;
 @linkcolor-hover: #a500a5;
 @linkcolor-active: #ff99ff;
+@linkcolor-menu: #ff99ff;
 
 /* ----- / Basic typography ----- */
 @fontsize-default: 13px;
 @fontsize-secondary: 12px;
 
-@lineheight-default: 18px;
-@lineheight-secondary: 16px;
+@lineheight-default: 20px;
+@lineheight-secondary: 18px;
 
 .text-shadow(@param) {
   -webkit-text-shadow: @param;
@@ -24,7 +25,7 @@
 
 .background-white(@param) {
   background: url('../images/white-bg-80.png');
-  background: rgba(0,0,0,@param);
+  background: rgba(255,255,255,@param);
 }
 
 body {
@@ -34,18 +35,36 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6, {
   color: #000;
-  font-size: @fontsize-default * 1.9;
+  font-family: "BebasNeueRegular",Arial,sans-serif;
+}
+
+h1 {
+  font-size: @fontsize-default * 2.75;
 }
 
 h2 {
-  font-size: @fontsize-default * 1.4;
-  color: #000;
+  font-size: @fontsize-default * 2;
+}
+
+h3 {
+  font-size: @fontsize-default * 1.5;
 }
 
 p {
   margin-bottom: 0.6em;
+}
+
+/* ----- / Tabs ----- */
+
+.tabs {
+  font-size: @fontsize-default * 1;
 }
 
 /* ----- / Forms ----- */
@@ -79,7 +98,10 @@ a:visited {
 }
 
 a:hover,
-a:focus &
+a:focus {
+  color: @linkcolor-active;
+  text-decoration: underline;
+}
 
 a:active {
   color: @linkcolor-active;
@@ -114,7 +136,7 @@ li a.active {
 
 #left .menu li a.active,
 #left .menu li a.active-trail {
-  color: @linkcolor-visited;
+  color: @linkcolor-menu;
   font-size: @fontsize-default * 2;
 }
 
@@ -127,13 +149,13 @@ li a.active {
 }
 
 #left .menu li a:focus {
-  color: @linkcolor-visited;
+  color: @linkcolor-menu;
 }
 
 #left .menu li a.active:hover,
 #left .menu li a.active-trail:hover {
   .background-black(0.85);
-  color: @linkcolor-visited;
+  color: @linkcolor-menu;
   font-size: @fontsize-default * 2;
 }
 
@@ -153,7 +175,21 @@ li a.active {
 #block-menu-secondary-links ul li a:hover {
   .background-black(0.85);
   border: 0;
-  color: @linkcolor-visited;
+  color: #fff;
+}
+
+/* !----- / Facebook menu item ----- */
+#block-menu-secondary-links ul li a.facebook {
+  background: url('../images/facebook.png') no-repeat center top;
+  height: 19px;
+  overflow: hidden;
+  padding: 0;
+  text-indent: -10000px;
+  width: 20px;
+}
+
+#block-menu-secondary-links ul li a.facebook:hover {
+  background-position: center bottom;
 }
 
 /* !----- / Spotboxes ----- */
@@ -168,7 +204,7 @@ li a.active {
 }
 
 .nodespotbox .content-wrapper .link a:visited {
-  color: @linkcolor-visited;
+  color: @linkcolor-menu;
 }
 
 .nodespotbox .content-wrapper .link a:hover {

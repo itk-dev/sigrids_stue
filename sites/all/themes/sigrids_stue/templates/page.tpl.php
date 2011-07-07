@@ -6,7 +6,7 @@
     <?php print $styles; ?>
     <?php print $scripts; ?>
   </head>
-  <body class="<?php print $body_classes; ?>"<?php print drupal_attributes($attr)?>>
+  <body class="<?php print $body_classes; ?>"<?php print drupal_attributes($attr)?> <?php print $background; ?>>
 
   <?php if ($site_aak_topbar): ?>
     <?php print $site_aak_topbar ?>
@@ -53,7 +53,7 @@
         <div id="mission" class="mission"><p><?php print $mission ?></p></div>
       <?php endif; ?>
 
-      <div id="main" class="<?php print ns('grid-12', $left && !$right, 6, $left && $right, 3, $right && !$left, 6, $right && $left, 3, 'rc', 9); ?>">
+      <div id="main" class="<?php print ns('grid-12', $left && !$right, 6, $left && $right, 3, $right && !$left, 6, $right && $left, 3, 'rc', 9); ?> alpha omega">
 
         <?php print $messages; ?>
         <?php print $help; ?>
@@ -64,7 +64,7 @@
           </div>
         <?php endif; ?>
 
-        <?php if (!$is_front && !empty($title)): ?><h1 class="title" id="page-title"><?php print $title; ?></h1><?php endif; ?>
+        <?php if (!empty($title)): ?><h1 class="title" id="page-title"><?php print $title; ?></h1><?php endif; ?>
 
         <?php if ($content_top): ?>
           <div id="content-top" class="region"><?php print $content_top ?></div>

@@ -1,29 +1,5 @@
 <?php
 
-/**
- * Implementation of hook_menu_item().
- *
- * Adds odd/even to all menu lists.
- */
-function sigrids_stue_menu_item($link, $has_children, $menu = '', $in_active_trail = FALSE, $extra_class = NULL) {
-  static $zebra = FALSE;
-  $zebra = !$zebra;
-  $class = ($menu ? 'expanded' : ($has_children ? 'collapsed' : 'leaf'));
-  if (!empty($extra_class)) {
-    $class .= ' '. $extra_class;
-  }
-  if ($in_active_trail) {
-    $class .= ' active-trail';
-  }
-  if ($zebra) {
-    $class .= ' even';
-  }
-  else {
-    $class .= ' odd';
-  }
-  return '<li class="'. $class .'">'. $link . $menu ."</li>\n";
-}
-
 // Auto-rebuild the theme registry during theme development.
 if (theme_get_setting('sigrids_stue_rebuild_registry')) {
   drupal_rebuild_theme_registry();
@@ -32,6 +8,19 @@ if (theme_get_setting('sigrids_stue_rebuild_registry')) {
 function sigrids_stue_preprocess_page(&$vars) {
 
   global $theme_info;
+
+  // Set variables for the logo and site_name.
+  $vars['logo_alt_text'] = (empty($vars['logo_alt_text']) ? variable_get('site_name', '') : $vars['logo_alt_text']);
+  $vars['site_logo'].= '<a id="site-logo" href="'. $vars['front_page'] .'" title="'. $vars['logo_alt_text'] .'" rel="home">';
+
+  if (!empty($vars['logo'])) {
+    // Return the site_name even when site_name is disabled in theme settings.
+    $vars['site_logo'].= '<img src="'. $vars['logo'] .'" alt="'. $vars['logo_alt_text'] .'" />';
+  } else {
+    $vars['site_logo'].= variable_get('site_name', '');
+  }
+
+  $vars['site_logo'].= '</a>';
 
   // Get the path to the theme to make the code more efficient and simple.
   $path = drupal_get_path('theme', $theme_info->name);
@@ -64,30 +53,4 @@ function sigrids_stue_preprocess_page(&$vars) {
     }
   }
 
-  /**
-  * Implementation of hook_preprocess_page().
-  *
-  * Create footer menu.
-  */
-  $tree = menu_tree_all_data('primary-links');
-  $vars['footer_menu'] = '<div class="footer-menu grid-8">' . menu_tree_output($tree) . '</div>';
-
-}
-
-/**
- * Add current page to breadcrumb
- */
-function sigrids_stue_breadcrumb($breadcrumb) {
-  if (!empty($breadcrumb)) {
-    $title = drupal_get_title();
-    if (!empty($title)) {
-      // Get separator
-      global $theme_info;
-      if (theme_get_setting('sigrids_stue_breadcrumb_separator')) {
-        $sep = '<span class="breadcrumb-sep">'. theme_get_setting('sigrids_stue_breadcrumb_separator').'</span>';
-      }
-      $breadcrumb[]='<span class="breadcrumb-current">'. $title .'</span>';
-    }
-    return '<div class="breadcrumb">'. implode($sep, $breadcrumb) .'</div>';
-  }
 }
