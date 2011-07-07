@@ -44,7 +44,7 @@
       <?php endif ?>
 
       <?php if ($left ): ?>
-        <div id="left" class="<?php print ns('grid-4', $right, 1, 'rc', 3); ?> region">
+        <div id="left" class="<?php print ns('grid-4', $right, 1, 'rc', 3); ?> alpha region">
           <?php print $left; ?>
         </div>
       <?php endif ?>

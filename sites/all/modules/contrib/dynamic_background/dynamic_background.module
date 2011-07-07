@@ -1,0 +1,88 @@
+<?php
+
+/**
+ * @file
+ * This module enables administrators to upload images used as background on
+ * the site. The selected background image link is exposed as either $background
+ * in the page.tpl file or as /background.css.
+ *
+ */
+
+// Get the upload form element
+module_load_include('inc', 'dynamic_background', 'includes/upload.form');
+
+/**
+ * Implementation of hook_perm().
+ */
+function dynamic_background_perm() {
+  return array(
+     'configure dynamic backgrounds',
+     'set dynamic backgrounds',
+     'dynamic backgrounds css',
+    );
+ }
+
+/**
+ * Implementation of hook_menu().
+ */
+function dynamic_background_menu() {
+  $items = array();
+
+  $items['admin/build/backgrounds'] = array(
+    'title' => 'Dynamic background',
+    'description' => t('Upload background images.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dynamic_background_admin_images'),
+    'access arguments' => array('set dynamic backgrounds'),
+    'file' => 'includes/backgrounds.admin.inc',
+  );
+
+  $items['admin/build/backgrounds/images'] = array(
+    'title' => 'Background images',
+    'description' => t('Upload background images and select current active background.'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
+
+  $items['admin/build/backgrounds/settings'] = array(
+    'title' => 'Settings',
+    'description' => t('Configure dynamic backgrounds settings'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dynamic_background_admin_settings'),
+    'access arguments' => array('configure dynamic backgrounds'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -5,
+    'file' => 'includes/settings.admin.inc',
+  );
+
+  $items['background.css'] = array(
+    'page callback' => 'dynamic_background_css',
+    'access arguments' => array('dynamic backgrounds css'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Page preprocess function used to create the $background variable, so it
+ * can be used in page.tpl.
+ *
+ */
+function dynamic_background_preprocess_page(&$vars) {
+  $background = variable_get('dynamic_background_active', NULL);
+  if (isset($background)) {
+    $vars['background'] = 'style="background-image: url(\'/' . $background . '\')"';
+  }
+}
+
+/**
+ * Menu callback function used to generate an body style css with the selected
+ * background image. The callback is /background.css.
+ */
+function dynamic_background_css() {
+  $background = variable_get('dynamic_background_active', NULL);
+  if (isset($background)) {
+    echo 'body, body.admin { background-image: url("/' . $background . '"); }';
+  }
+}

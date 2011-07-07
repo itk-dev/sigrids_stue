@@ -1,0 +1,14 @@
+#dynamic-background-admin-images .form-item-labeled {
+  overflow: hidden;
+}
+
+#dynamic-background-admin-images .form-option,
+#dynamic-background-admin-images .form-item-labeled label {
+  width: 450px;
+}
+
+#dynamic-background-admin-images .background-upload-form .imagecache-dynamic_background_thumb {
+  float: right;
+  margin-top: -14px;
+  margin-right: 10px;
+}

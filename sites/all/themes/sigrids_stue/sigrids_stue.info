@@ -23,6 +23,8 @@ regions[footer] = Footer
 ;Stylesheets
 stylesheets[screen][] = styles/sigrids-stue-styles.less
 stylesheets[screen][] = styles/sigrids-stue-typography.less
+stylesheets[screen][] = fonts/titilliumtext/titilliumtext.css
+stylesheets[screen][] = fonts/bebasneue/bebasneue.css
 
 ;IE specific stylesheets
 ie stylesheets[if IE 7][all][] = styles/sigrids-stue-ie7.less
