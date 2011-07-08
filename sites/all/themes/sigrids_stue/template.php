@@ -9,18 +9,6 @@ function sigrids_stue_preprocess_page(&$vars) {
 
   global $theme_info;
 
-  // Set variables for the logo and site_name.
-  $vars['logo_alt_text'] = (empty($vars['logo_alt_text']) ? variable_get('site_name', '') : $vars['logo_alt_text']);
-  $vars['site_logo'].= '<a id="site-logo" href="'. $vars['front_page'] .'" title="'. $vars['logo_alt_text'] .'" rel="home">';
-
-  if (!empty($vars['logo'])) {
-    $vars['site_logo'].= '<img src="'. $vars['logo'] .'" alt="'. $vars['logo_alt_text'] .'" />';
-  } else {
-    $vars['site_logo'].= variable_get('site_name', '');
-  }
-
-  $vars['site_logo'].= '</a>';
-
   // Get the path to the theme to make the code more efficient and simple.
   $path = drupal_get_path('theme', $theme_info->name);
 

@@ -55,6 +55,19 @@ body {
   top: 50px;
 }
 
+.logo a {
+  background: url('../logo.png') no-repeat top left;
+  display: block;
+  height: 156px;
+  overflow: hidden;
+  text-indent: -10000px;
+  width: 268px;
+}
+
+.logo a:hover {
+  background-position: bottom left;
+}
+
 /* !----- / Main ----- */
 
 #main {
@@ -93,14 +106,23 @@ body {
 }
 
 #left .menu li,
-#left .menu li.first.active-trail.active,
-#left .menu li li.first {
+#left .menu li.first.active-trail.active {
   border: 0;
   display: block;
   float: none;
   list-style: none;
   margin: 0 0 10px;
   padding: 0;
+}
+
+#left .menu li li,
+#left .menu li.active li {
+  border: 0;
+  margin: 0 0 5px;
+}
+
+#left .menu li li.last {
+  margin: 0;
 }
 
 #left .menu a,
