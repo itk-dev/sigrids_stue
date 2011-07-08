@@ -53,7 +53,7 @@
         <div id="mission" class="mission"><p><?php print $mission ?></p></div>
       <?php endif; ?>
 
-      <div id="main" class="<?php print ns('grid-12', $left && !$right, 6, $left && $right, 3, $right && !$left, 6, $right && $left, 3, 'rc', 9); ?> alpha omega">
+      <div id="main" class="<?php print ns('grid-12', $left && !$right, 4, $left && $right, 3, $right && !$left, 4, $right && $left, 3, 'rc', 9); ?> alpha omega">
 
         <?php print $messages; ?>
         <?php print $help; ?>
@@ -70,42 +70,13 @@
           <div id="content-top" class="region"><?php print $content_top ?></div>
         <?php endif; ?>
         <div id="content" class=""><?php print $content ?></div>
-        <?php if ($content_bottom): ?>
-          <div id="content-bottom" class="region"><?php print $content_bottom ?></div>
-        <?php endif; ?>
       </div>
- 
-      <?php if ($right): ?>
-        <div id="right" class="<?php print ns('grid-4', $left, 1, 'rc', 3); ?> region">
-          <?php print $right; ?>
-        </div>
-      <?php endif ?>
+      <?php if ($content_bottom): ?>
+        <div id="content-bottom" class="region clear"><?php print $content_bottom ?></div>
+      <?php endif; ?>
+
     </div>
   </div>
-
-  <?php if ($three_column_first || $three_column_second || $three_column_last): ?>
-    <div class="three-column">
-      <div class="container-12">
-      <?php if ($three_column_first): ?>
-        <div class="three-column grid-4 first region">
-          <?php print $three_column_first; ?>
-        </div>
-      <?php endif ?>
-
-      <?php if ($three_column_second): ?>
-        <div class="three-column grid-4 second region">
-          <?php print $three_column_second; ?>
-        </div>
-      <?php endif ?>
-
-      <?php if ($three_column_last): ?>
-        <div class="three-column grid-4 last region">
-          <?php print $three_column_last; ?>
-        </div>
-      <?php endif ?>
-      </div>
-    </div>
-  <?php endif ?>
 
   <?php print $closure ?>
   </body>

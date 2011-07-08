@@ -11,14 +11,8 @@ regions[topbar] = Topbar
 regions[header] = Header
 regions[top_region] = Top
 regions[content_top] = Content, Above
-regions[three_column_first] = Three column first
-regions[three_column_second] = Three column second
-regions[three_column_last] = Three column last
 regions[content_bottom] = Content, Below
 regions[left] = Left
-regions[right] = Right
-regions[bottom_region] = Bottom
-regions[footer] = Footer
 
 ;Stylesheets
 stylesheets[screen][] = styles/sigrids-stue-styles.less
