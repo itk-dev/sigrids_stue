@@ -14,7 +14,6 @@ function sigrids_stue_preprocess_page(&$vars) {
   $vars['site_logo'].= '<a id="site-logo" href="'. $vars['front_page'] .'" title="'. $vars['logo_alt_text'] .'" rel="home">';
 
   if (!empty($vars['logo'])) {
-    // Return the site_name even when site_name is disabled in theme settings.
     $vars['site_logo'].= '<img src="'. $vars['logo'] .'" alt="'. $vars['logo_alt_text'] .'" />';
   } else {
     $vars['site_logo'].= variable_get('site_name', '');

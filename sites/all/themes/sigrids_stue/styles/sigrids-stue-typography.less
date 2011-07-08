@@ -128,8 +128,7 @@ li a.active {
   text-transform: uppercase;
 }
 
-#left .menu li a,
-#left .menu li li.first a {
+#left .menu li a {
   .background-black(0.75);
   border: 0;
 }
@@ -157,6 +156,23 @@ li a.active {
   .background-black(0.85);
   color: @linkcolor-menu;
   font-size: @fontsize-default * 2;
+}
+
+#left .menu li li a.active {
+  .background-black(0.75);
+}
+
+#left .menu li li a,
+#left .menu li li a.active,
+#left .menu li li a.active-trail {
+  font-size: @fontsize-default * 1.25;
+}
+
+#left .menu li li a:hover,
+#left .menu li li a:focus,
+#left .menu li li a.active:hover,
+#left .menu li li a.active-trail:hover {
+  font-size: @fontsize-default * 1.35;
 }
 
 /* !----- / Secondary menu ----- */

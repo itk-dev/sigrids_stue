@@ -87,40 +87,41 @@ body {
 
 /* !----- / Main menu ----- */
 
-#left .menu li,
-#left .menu li.first.active-trail.active,
-#left .menu li li.first {
-  border: 0;
-  margin: 0 0 10px;
-}
-
-.menu-block ul li {
-  display: block;
-  float: none;
-  list-style: none;
-  margin: 0 5px;
-  padding: 0;
-}
-
-#left .menu a,
-.menu-block ul li a {
-  display: inline-block;
-  padding: 8px 10px 7px;
-  text-decoration: none;
-}
-
-#left .menu li.first.active-trail.active a,
-#left .menu li li.first a,
-#left .menu li a {
-  border: 0;
-}
-
 #main-menu {
   background-color: transparent;
   position: relative;
 }
 
-.menu-block ul li.last {
+#left .menu li,
+#left .menu li.first.active-trail.active,
+#left .menu li li.first {
+  border: 0;
+  display: block;
+  float: none;
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+#left .menu a,
+#left .menu li a,
+#left .menu li li a {
+  display: inline-block;
+  padding: 8px 10px 7px;
+  text-decoration: none;
+}
+
+#left .menu ul {
+  margin: 10px 0 0 10px;
+}
+
+#left .menu li a,
+#left .menu li li.first a,
+#left .menu li.first.active-trail.active a {
+  border: 0;
+}
+
+#left .menu li.last {
   margin-right: 0;
 }
 
