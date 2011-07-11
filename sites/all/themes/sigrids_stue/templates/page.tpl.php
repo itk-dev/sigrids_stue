@@ -49,31 +49,30 @@
         </div>
       <?php endif ?>
 
-      <?php if ($mission): ?>
-        <div id="mission" class="mission"><p><?php print $mission ?></p></div>
-      <?php endif; ?>
-
       <div id="main" class="<?php print ns('grid-12', $left && !$right, 4, $left && $right, 3, $right && !$left, 4, $right && $left, 3, 'rc', 9); ?> alpha omega">
+        <div id="main-inner">
+          <?php print $messages; ?>
+          <?php print $help; ?>
 
-        <?php print $messages; ?>
-        <?php print $help; ?>
+          <?php if ($tabs): ?>
+            <div class="tabs">
+              <?php print $tabs; ?>
+            </div>
+          <?php endif; ?>
 
-        <?php if ($tabs): ?>
-          <div class="tabs">
-            <?php print $tabs; ?>
-          </div>
-        <?php endif; ?>
+          <?php if (!empty($title)): ?><h1 class="title" id="page-title"><?php print $title; ?></h1><?php endif; ?>
 
-        <?php if (!empty($title)): ?><h1 class="title" id="page-title"><?php print $title; ?></h1><?php endif; ?>
-
-        <?php if ($content_top): ?>
-          <div id="content-top" class="region"><?php print $content_top ?></div>
-        <?php endif; ?>
-        <div id="content" class=""><?php print $content ?></div>
+          <?php if ($content_top): ?>
+            <div id="content-top" class="region"><?php print $content_top ?></div>
+          <?php endif; ?>
+          <div id="content" class=""><?php print $content ?></div>
       </div>
+
       <?php if ($content_bottom): ?>
-        <div id="content-bottom" class="region clear"><?php print $content_bottom ?></div>
+        <div id="content-bottom" class="grid-8 region"><?php print $content_bottom ?></div>
       <?php endif; ?>
+
+    </div>
 
     </div>
   </div>

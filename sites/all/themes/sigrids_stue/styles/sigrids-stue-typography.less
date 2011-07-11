@@ -28,6 +28,12 @@
   background: rgba(255,255,255,@param);
 }
 
+.transition-font-size (@duration: .1s) {
+  -moz-transition: font-size @duration linear;
+  -webkit-transition: font-size @duration linear;
+  transition: font-size @duration linear;
+}
+
 body {
   font: @fontsize-default "TitilliumText22LRegular", Arial,sans-serif;
   line-height: @lineheight-default;
@@ -156,6 +162,7 @@ li a.active {
   color: #fff;
   font-size: @fontsize-default * 1.75;
   text-decoration: none;
+  .transition-font-size();
 }
 
 #left .menu li a:focus {
@@ -222,12 +229,21 @@ li a.active {
 /* !----- / Spotboxes ----- */
 
 .nodespotbox h3 {
-  font-size: @fontsize-default * 1.1;
+  font-size: @fontsize-default * 1.75;
   line-height: @lineheight-default * 1.1;
 }
 
-.nodespotbox .content-wrapper .link a {
+.nodespotbox p {
+  line-height: @lineheight-default * 1.5;
+}
+
+.nodespotbox .content-wrapper .link a,
+.nodespotbox .content-wrapper .link a:link {
+  .background-black(0.75);
+  font: @fontsize-default * 1.12 "BebasNeueRegular",Arial,sans-serif;
   line-height: @lineheight-default * 1;
+  padding: 3px 4px 0;
+  text-transform: uppercase;
 }
 
 .nodespotbox .content-wrapper .link a:visited {
@@ -235,8 +251,9 @@ li a.active {
 }
 
 .nodespotbox .content-wrapper .link a:hover {
+  .background-black(0.85);
   border: 0;
-  color: @linkcolor-hover;
+  color: @linkcolor-menu;
   text-decoration: none;
 }
 

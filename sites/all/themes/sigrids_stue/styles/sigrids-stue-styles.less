@@ -71,8 +71,12 @@ body {
 /* !----- / Main ----- */
 
 #main {
+  margin: 0 0 20px;
+}
+
+#main-inner {
   .background-white(0.8);
-  margin: 0 -30px 20px 20px;
+  margin: 0 -10px 20px 10px;
   padding: 20px;
 }
 
@@ -80,6 +84,11 @@ body {
 
 #content .content {
   padding: 0;
+}
+
+#content-bottom {
+  margin: 0;
+  width: 640px;
 }
 
 /* !----- / Secondary menu ----- */
@@ -206,8 +215,7 @@ body {
 }
 
 .views_slideshow_slide h3 {
-  background: url('../images/slideshow-transparent-bg.png');
-  background: rgba(234, 233, 228, 0.7);
+  .background-black(0.8);
   border: 1px solid #bbb;
   bottom: 30px;
   left: 0;
@@ -244,6 +252,35 @@ html.js span.views-throbbing {
 
 textarea, input[type="text"], input[type="password"] {
   padding: 7px;
+}
+
+/* !----- / Spotbox ----- */
+
+.nodespotbox {
+  min-height: 200px;
+}
+
+.nodespotbox h3,
+.nodespotbox .image,
+.nodespotbox .content-wrapper {
+  .background-white(0.8);
+}
+
+.nodespotbox h3 {
+  margin: 0;
+  padding: 20px 20px 15px;
+}
+
+.nodespotbox .image {
+  padding: 0 0 20px;
+}
+
+.nodespotbox .content-wrapper {
+  padding: 0 20px 20px 20px;
+}
+
+.nodespotbox .content-wrapper p {
+  display: inline;
 }
 
 /* !----- / Shadowbox ----- */
