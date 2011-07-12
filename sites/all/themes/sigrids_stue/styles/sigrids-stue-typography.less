@@ -231,6 +231,11 @@ li a.active {
   text-decoration: none;
 }
 
+#block-menu-secondary-links ul li a:active,
+.block-langswitch ul li a:active {
+  text-decoration: none;
+}
+
 /* !----- / Facebook menu item ----- */
 .header .block a.facebook {
   background: url('../images/facebook.png') no-repeat center top;
@@ -252,6 +257,11 @@ li a.active {
   line-height: @lineheight-default * 1.1;
 }
 
+.nodespotbox h3 a:hover,
+.nodespotbox h3 a:active {
+  color: #000;
+}
+
 .nodespotbox p {
   line-height: @lineheight-default * 1.5;
 }
@@ -259,6 +269,7 @@ li a.active {
 .nodespotbox .content-wrapper .link a,
 .nodespotbox .content-wrapper .link a:link {
   .background-black(0.75);
+  color: @linkcolor-menu;
   font: @fontsize-default * 1.12 "BebasNeueRegular",Arial,sans-serif;
   line-height: @lineheight-default * 1;
   padding: 3px 4px 0;
