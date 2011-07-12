@@ -1,0 +1,21 @@
+.dynamic-background-picture img,
+.dynamic-background-picture .form-option {
+  float: left;
+  border: none;
+}
+
+.dynamic-background-picture img {
+  margin-right: 10px;
+}
+
+.dynamic-background-picture {
+  clear: both;
+  min-height: 100px;
+  margin-bottom: 10px;
+  background: none repeat scroll 0 0 #FFFFFF;
+  border-color: #CCCCCC #DDDDDD #EEEEEE;
+  border-style: solid;
+  border-width: 1px;
+  padding: 5px;
+}
+

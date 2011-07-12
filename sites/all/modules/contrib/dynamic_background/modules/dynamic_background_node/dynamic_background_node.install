@@ -1,0 +1,39 @@
+<?php
+
+function dynamic_background_node_schema() {
+  $schema = array();
+
+  $schema['dynamic_background_node'] = array(
+    'description' => t(''),
+    'fields' => array(
+      'nid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'vid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'data' => array(
+        'type' => 'text',
+        'not null' => TRUE,
+      ),
+    ),
+  );
+
+  return $schema;
+}
+
+function dynamic_background_node_install() {
+  drupal_install_schema('dynamic_background_node');
+}
+
+function dynamic_background_node_uninstall() {
+  // Remove database table.
+  drupal_uninstall_schema('dynamic_background_node');
+
+  // Remove settings.
+  variable_del('dynamic_background_node');
+}

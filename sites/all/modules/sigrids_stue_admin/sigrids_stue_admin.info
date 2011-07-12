@@ -1,0 +1,4 @@
+; $Id$
+name = Sigrids Stue admin helper module
+description = Sigrids Stue helper module.
+core = 6.x

@@ -1,0 +1,157 @@
+<?php
+
+function dynamic_background_node_menu() {
+  $items = array();
+
+  $items['admin/build/backgrounds/nodes'] = array(
+    'title' => 'Nodes',
+    'description' => t('Configure dynamic backgrounds nodes'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dynamic_background_node_admin_form'),
+    'access arguments' => array('configure dynamic backgrounds nodes'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -10,
+  );
+
+  return $items;
+}
+
+
+function dynamic_background_node_admin_form($form) {
+  $form = array(
+    '#tree' => TRUE,
+  );
+
+  // Finde all the node types and make them radio options frindly.
+  $options = array();
+  $types = node_get_types();
+  foreach ($types as $key => $type) {
+    $options[$key] = $type->name . ' (' .t(check_plain($type->description)) . ')';
+  }
+
+  $defaults = variable_get('dynamic_background_node', array());
+  $form['dynamic_background_node'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Content types'),
+      '#description' => t('Enable background selection for these content types.'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+  );
+
+  $form['dynamic_background_node']['content_types'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Content types'),
+    '#required' => TRUE,
+    '#options' => $options,
+    '#default_value' => isset($defaults['content_types']) ? $defaults['content_types'] : array(),
+  );
+
+    // Add CSS behaviour options
+  $defaults = variable_get('dynamic_background_node_css', array());
+  $form['dynamic_background_node_css'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('CSS behaviour'),
+    '#collapsed' => FALSE,
+    '#collapsible' => TRUE,
+    '#tree' => TRUE,
+  );
+
+  $form['dynamic_background_node_css']['selector'] = array(
+    '#type' => 'textfield',
+    '#title' => t('CSS selector'),
+    '#description' => t('The CSS selector string to target with the background image.'),
+    '#default_value' => isset($defaults['selector']) ? $defaults['selector'] : '',
+  );
+
+  $form['dynamic_background_node_css']['css'] = array(
+    '#type' => 'textarea',
+    '#title' => t('CSS'),
+    '#description' => t('The CSS to insert with the background image e.g background-size: cover;.'),
+    '#default_value' => isset($defaults['css']) ? $defaults['css'] : '',
+  );
+
+  return system_settings_form($form);
+}
+
+function dynamic_background_node_form_alter(&$form, &$form_state, $form_id) {
+  $settings = variable_get('dynamic_background_node', array());
+  if (isset($settings['content_types']) && $settings['content_types'][$form['type']['#value']]) {
+    $form['dynamic_background'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Node background'),
+      '#collapsed' => FALSE,
+      '#collapsible' => TRUE,
+      '#tree' => TRUE,
+    );
+
+    $images = variable_get('dynamic_background_images', array());
+    foreach ($images as $key => $image) {
+      if (isset($image['default'])) {
+        $picture = theme('imagecache', 'dynamic_background_thumb', $image['default'], t('Image preview'), t('Image preview'), NULL);
+        $form['dynamic_background'][$key]['image'] = array(
+          '#value' => $picture,
+          '#prefix' => '<div class="dynamic-background-picture">',
+        );
+
+        $value = isset($form['#node']->dynamic_background[$key]['selected']) ? $form['#node']->dynamic_background[$key]['selected'] : 0;
+        $form['dynamic_background'][$key]['selected'] = array(
+          '#type' => 'checkbox',
+          '#title' => t('Use as background'),
+          '#default_value' => $value,
+          '#suffix' => '</div>',
+        );
+      }
+    }
+
+    drupal_add_css(drupal_get_path('module', 'dynamic_background_node') . '/css/dynamic_background_node.admin.css');
+  }
+}
+
+function dynamic_background_node_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+  $settings = variable_get('dynamic_background_node', array());
+  if (isset($settings['content_types']) && $settings['content_types'][$node->type]) {
+    switch ($op) {
+      case 'load':
+        $result = db_query('SELECT data FROM {dynamic_background_node} WHERE nid=%d AND vid=%d', $node->nid, $node->vid);
+        $result = db_fetch_object($result)->data;
+        if ($result) {
+          $node->dynamic_background = unserialize($result);
+        }
+        break;
+
+      case 'insert':
+      case 'update':
+        db_query('INSERT INTO {dynamic_background_node} VALUES (%d, %d, "%s")', $node->nid, $node->vid, serialize($node->dynamic_background));
+        break;
+
+      case 'delete':
+        db_query('DELETE FROM {dynamic_background_node} WHERE nid=%d', $node->nid);
+        break;
+    }
+  }
+}
+
+function dynamic_background_node_preprocess_page(&$vars) {
+  // Find the active image
+  if (isset($vars['node']) && isset($vars['node']->dynamic_background)) {
+    $node = $vars['node'];
+    $image_id = NULL;
+    foreach ($node->dynamic_background as $key => $value) {
+      if ($value['selected']) {
+        $image_id = $key;
+        break;
+      }
+    }
+
+    if ($image_id) {
+      $backgrounds = variable_get('dynamic_background_images', array());
+      if (isset($backgrounds[$image_id])) {
+        $css = dynamic_background_create_css($backgrounds[$image_id]['default'], 'dynamic_background_node_css');
+        if ($css) {
+          $vars['styles'] .= '<style type="text/css">'.$css.'</style>';
+        }
+        $vars['background_node'] = 'style="background-image: url(\'/' . $backgrounds[$image_id]['default'] . '\')"';
+      }
+    }
+  }
+}

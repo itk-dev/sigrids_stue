@@ -60,30 +60,32 @@ function dynamic_background_admin_images_validate($form, &$form_state) {
   // Check that only one image is selected as active (use).
 
   // Loop through all uploaded files.
-  foreach ($_FILES['files']['name'] as $file_field => $val) {
-    if ($val == '') {
-      continue;
-    }
-    if ($file = file_save_upload($file_field, $validators)) {
-      $info = image_get_info($file->filepath);
-      $destination = file_directory_path(). '/' . $settings['path'] . '/' . $file->filename;
-
-      // Check if file exists.
-      if (file_exists($destination)) {
-        form_set_error('default', t('Failded to upload image, as one with that name exists.'));
-        return;
+  if (!empty($_FILES)) {
+    foreach ($_FILES['files']['name'] as $file_field => $val) {
+      if ($val == '') {
+        continue;
       }
+      if ($file = file_save_upload($file_field, $validators)) {
+        $info = image_get_info($file->filepath);
+        $destination = file_directory_path(). '/' . $settings['path'] . '/' . $file->filename;
 
-      // Copy file.
-      if (file_copy($file, $destination, FILE_EXISTS_REPLACE)) {
-        $form_state['values'][$file_field]['default'] = $file->filepath;
+        // Check if file exists.
+        if (file_exists($destination)) {
+          form_set_error('default', t('Failded to upload image, as one with that name exists.'));
+          return;
+        }
+
+        // Copy file.
+        if (file_copy($file, $destination, FILE_EXISTS_REPLACE)) {
+          $form_state['values'][$file_field]['default'] = $file->filepath;
+        }
+        else {
+          form_set_error('default', t("Failed to upload the image; the %directory directory doesn't exist or is not writable.", array('%directory' => file_directory_path(). '/' . $settings['path'])));
+        }
       }
       else {
-        form_set_error('default', t("Failed to upload the image; the %directory directory doesn't exist or is not writable.", array('%directory' => file_directory_path(). '/' . $settings['path'])));
+       form_set_error('default', t("Failed to upload the image; the image type should be jpeg, jpg or png."));
       }
-    }
-    else {
-     form_set_error('default', t("Failed to upload the image; the image type should be jpeg, jpg or png."));
     }
   }
 

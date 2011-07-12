@@ -1,8 +1,9 @@
-name = Dynamic background
-description = Enables administrators to upload images, which are used as background on the site.
+name = Dynamic background node
+description = Allows users to select uploaded backgrounds for nodes.
 package = Other
 core = 6.x
 dependencies[] = imagecache
+dependencies[] = dynamic_background
 
 ; Information added by drupal.org packaging script on 2011-07-12
 version = "6.x-1.x-dev"

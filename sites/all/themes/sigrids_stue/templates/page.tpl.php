@@ -6,7 +6,7 @@
     <?php print $styles; ?>
     <?php print $scripts; ?>
   </head>
-  <body class="<?php print $body_classes; ?>"<?php print drupal_attributes($attr)?> <?php print $background; ?>>
+  <body class="<?php print $body_classes; ?>"<?php print drupal_attributes($attr)?>>
 
   <?php if ($site_aak_topbar): ?>
     <?php print $site_aak_topbar ?>

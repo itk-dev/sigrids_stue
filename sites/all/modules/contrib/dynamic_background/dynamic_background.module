@@ -65,6 +65,25 @@ function dynamic_background_menu() {
 }
 
 /**
+ * Helper function that creates a CSS selector based on user supplied css.
+ *
+ * @param string $image
+ * @return string $css or FALSE if custom CSS have not been defined
+ */
+function dynamic_background_create_css($image, $conf = 'dynamic_background_css') {
+  $css = FALSE;
+  $css_options = variable_get($conf, array());
+  if (!empty($css_options['selector'])) {
+    $css = $css_options['selector'] . " {
+      background-image: url('" . file_create_url($image) . "');
+      " . $css_options['css'] . "
+    }";
+  }
+
+  return $css;
+}
+
+/**
  * Page preprocess function used to create the $background variable, so it
  * can be used in page.tpl.
  *
@@ -72,6 +91,10 @@ function dynamic_background_menu() {
 function dynamic_background_preprocess_page(&$vars) {
   $background = variable_get('dynamic_background_active', NULL);
   if (isset($background)) {
+    $css = dynamic_background_create_css($background);
+    if ($css) {
+      $vars['styles'] .= '<style type="text/css">'.$css.'</style>';
+    }
     $vars['background'] = 'style="background-image: url(\'/' . $background . '\')"';
   }
 }

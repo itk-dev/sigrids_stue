@@ -1,0 +1,17 @@
+<?php
+
+/**
+  * Implementation of hook_form_alter.
+  * NOT USED BECAUSE THE CONTENT OF FIELD_TEASER DOES NOT GET SAVED.
+  * Leaving it, so it can get fixed later.
+  */
+// function sigrids_stue_admin_form_alter(&$form, &$form_state, $form_id) {
+  // Make sure the form is a node and the field_teaser and nodespotbox is available
+  // if (isset($form['type']) && isset($form['#node']) && $form['type']['#value'] .'_node_form' == $form_id && isset($form[field_teaser]) && isset($form[nodespotbox])) {
+    // Add field_teaser to nodespotbox group
+    // $form['nodespotbox']['field_teaser'] = $form[field_teaser];
+
+    // Unset field_teaser
+    // unset($form[field_teaser]);
+  // }
+// }
