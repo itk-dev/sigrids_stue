@@ -205,27 +205,34 @@ li a.active {
   font-size: @fontsize-default * 1.35;
 }
 
-/* !----- / Secondary menu ----- */
+/* !----- / Secondary menu and language switch ----- */
 
-#block-menu-secondary-links ul li {
+#block-menu-secondary-links ul li,
+.block-langswitch ul li {
   background: none;
+  list-style: none;
 }
 
-#block-menu-secondary-links ul li a {
+#block-menu-secondary-links ul li a,
+.block-langswitch ul li a {
   .background-black(0.75);
   color: #fff;
+  display: block;
   font: @fontsize-default * 1.12 "BebasNeueRegular",Arial,sans-serif;
   line-height: 100%;
+  padding: 4px 5px 0;
 }
 
-#block-menu-secondary-links ul li a:hover {
+#block-menu-secondary-links ul li a:hover,
+.block-langswitch ul li a:hover {
   .background-black(0.85);
   border: 0;
   color: #fff;
+  text-decoration: none;
 }
 
 /* !----- / Facebook menu item ----- */
-#block-menu-secondary-links ul li a.facebook {
+.header .block a.facebook {
   background: url('../images/facebook.png') no-repeat center top;
   height: 19px;
   overflow: hidden;
@@ -234,7 +241,7 @@ li a.active {
   width: 20px;
 }
 
-#block-menu-secondary-links ul li a.facebook:hover {
+.header .block a.facebook:hover {
   background-position: center bottom;
 }
 
