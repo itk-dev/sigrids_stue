@@ -5,6 +5,13 @@ if (theme_get_setting('sigrids_stue_rebuild_registry')) {
   drupal_rebuild_theme_registry();
 }
 
+/**
+ * Implementation of preprocess_comment
+ * Removing "add" and "new" in comment links
+ */
+function sigrids_stue_preprocess_comment(&$vars) {
+}
+
 function sigrids_stue_preprocess_page(&$vars) {
 
   global $theme_info;

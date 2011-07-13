@@ -290,3 +290,37 @@ li a.active {
 .nodespotbox .content-wrapper .link a:active {
   color: @linkcolor-active;
 }
+
+/* !----- / Blog ----- */
+
+#blog {
+  .date-wrapper {
+    color: #fff;
+    text-align: center;
+    .day {
+      font: @fontsize-default * 2 "BebasNeueRegular",Arial,sans-serif;
+      line-height: 100%;
+      margin: 8px 0 0;
+    }
+    .month {
+      font: @fontsize-default * 1.1 "BebasNeueRegular",Arial,sans-serif;
+      margin: 0 0 8px;
+    }
+  }
+  h3 {
+    margin: 0 0 5px;
+    a {
+      text-decoration: none;
+      &:link {color: #000;}
+      &:visited {color: #000;}
+      &:hover {color: #000;}
+      &:active {color: #000;}
+    }
+  }
+  .author,
+  .date,
+  .comment,
+  .link {
+    color: #666;
+  }
+}
