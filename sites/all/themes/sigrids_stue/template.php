@@ -7,9 +7,16 @@ if (theme_get_setting('sigrids_stue_rebuild_registry')) {
 
 /**
  * Implementation of preprocess_comment
- * Removing "add" and "new" in comment links
+ * Change submitted data and add comment counter
  */
-function sigrids_stue_preprocess_comment(&$vars) {
+function sigrids_stue_preprocess_comment(&$variables){
+  static $depths_counter;
+
+  // Add comment counter
+  $variables['comment_counter'] = ++$depths_counter[$variables['comment']->nid][$variables['comment']->pid];
+  
+  // Change submitted data
+  $variables[submitted] = '<span class="author">' . $variables['comment']->name . '</span>, ' . format_date($variables['comment']->timestamp, 'custom', 'd. F Y - H:i');
 }
 
 function sigrids_stue_preprocess_page(&$vars) {

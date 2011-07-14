@@ -28,7 +28,7 @@
   background: rgba(255,255,255,@param);
 }
 
-.transition-font-size (@duration: .1s) {
+.transition-font-size(@duration: .1s) {
   -moz-transition: font-size @duration linear;
   -webkit-transition: font-size @duration linear;
   transition: font-size @duration linear;
@@ -90,11 +90,17 @@ input[type="text"], input[type="password"] {
 }
 
 input[type="submit"] {
-  background-color: #e5f0f3;
-  border: 1px solid #bccdd2;
-  color: #666;
+  .background-black(.75);
+  border: 0;
+  color: #fff;
   cursor: pointer;
+  font-weight: bold;
   padding: 5px 10px;
+  text-transform: uppercase;
+}
+
+input[type="submit"]:hover {
+  .background-black(.85);
 }
 
 /* ----- / Links ----- */
@@ -129,9 +135,9 @@ li a.active {
 .logo a:hover,
 .logo a:focus,
 .logo a:active {
-    color: #fff;
-    padding: 0;
-    text-decoration: none;
+  color: #fff;
+  padding: 0;
+  text-decoration: none;
 }
 
 /* ----- / Page ----- */
@@ -293,7 +299,8 @@ li a.active {
 
 /* !----- / Blog ----- */
 
-#blog {
+#blog,
+.blog-post {
   .date-wrapper {
     color: #fff;
     text-align: center;
@@ -319,8 +326,57 @@ li a.active {
   }
   .author,
   .date,
-  .comment,
+  .comments,
+  .add-comment,
   .link {
     color: #666;
+    text-decoration: none;
+    a {
+      &:link,
+      &:visited,
+      &:hover,
+      &:active {
+        text-decoration: none;
+      }
+      &:hover {color: @linkcolor-menu;}
+    }
+  }
+  .link {
+    a {
+      .background-black(0.75);
+      color: @linkcolor-menu;
+      font: @fontsize-default * 1.1 "BebasNeueRegular",Arial,sans-serif;
+      padding: 1px 4px 0;
+      &:link,
+      &:visited,
+      &:hover,
+      &:active {
+        text-decoration: none;
+      }
+      &:hover {.background-black(0.85);}
+    }
+  }
+}
+
+/* !----- / Pager ----- */
+
+.item-list {  
+  .pager {
+    a {
+      color: #000;
+      border: 0;
+      padding: 2px 8px;
+      text-decoration: none;
+      &:hover {color: @linkcolor;}
+    }
+  }
+}
+
+/* !----- / Comments ----- */
+
+#comments {
+  .submitted {
+    color: #000;
+    font-size: 110%;
   }
 }
