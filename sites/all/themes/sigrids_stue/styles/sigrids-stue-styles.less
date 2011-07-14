@@ -365,6 +365,18 @@ input.form-autocomplete {
     .background-white(.75);
     margin: 15px 0;
     padding: 20px 20px 10px;
+    position: relative;
+    .comment-count {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      text-align: center;
+    }
+    .submitted {
+      span {
+        margin: 0;
+      }
+    }
     .content {
       border: 0;
       padding: 10px 0 0;
@@ -374,7 +386,7 @@ input.form-autocomplete {
 
 #comment-form {
   .resizable-textarea {
-    width: 100%;
+    width: 97%;
   }
   input[type="submit"] {
     float: right;
