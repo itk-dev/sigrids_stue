@@ -63,8 +63,6 @@ function sigrids_stue_links($links, $attributes = array('class' => 'links')) {
   global $language;
   $output = '';
 
-  var_dump($links);
-
   // Comment hack
   if ($attributes['class'] == 'links inline') {
     if (isset($links['comment_add']) && !isset($links['comment_comments'])) {
