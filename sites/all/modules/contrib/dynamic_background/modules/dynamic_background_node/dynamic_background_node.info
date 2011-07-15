@@ -5,9 +5,9 @@ core = 6.x
 dependencies[] = imagecache
 dependencies[] = dynamic_background
 
-; Information added by drupal.org packaging script on 2011-07-12
-version = "6.x-1.x-dev"
+; Information added by drupal.org packaging script on 2011-07-15
+version = "6.x-1.1"
 core = "6.x"
 project = "dynamic_background"
-datestamp = "1310429614"
+datestamp = "1310715729"
 

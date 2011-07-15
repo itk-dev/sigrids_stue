@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * @file
+ * Installes the database scheme and handles install and uninstall of the
+ * module.
+ */
+
+/**
+ * Implementation of hook_schema(), which implementes the table
+ * dynamic_background_node that holds information about about the pr. node
+ * selected image.
+ *
+ * @return array $schema
+ */
 function dynamic_background_node_schema() {
   $schema = array();
 
@@ -26,10 +39,19 @@ function dynamic_background_node_schema() {
   return $schema;
 }
 
+/**
+ * Implementation of hook_install().
+ */
 function dynamic_background_node_install() {
   drupal_install_schema('dynamic_background_node');
+
+  // Make this module's weight heavy, so it overrides dynamic background main module.
+  db_query("UPDATE {system} SET weight = 210 WHERE type = 'module' AND name = 'dynamic_background_node'");
 }
 
+/**
+ * Implementation of hook_uninstall():
+ */
 function dynamic_background_node_uninstall() {
   // Remove database table.
   drupal_uninstall_schema('dynamic_background_node');

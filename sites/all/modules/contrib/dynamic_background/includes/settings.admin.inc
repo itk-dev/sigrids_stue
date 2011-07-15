@@ -58,7 +58,7 @@ function dynamic_background_admin_settings() {
   $form['dynamic_background_css']['selector'] = array(
     '#type' => 'textfield',
     '#title' => t('CSS selector'),
-    '#description' => t('The CSS selector string to target with the background image.'),
+    '#description' => t('The CSS selector string to target with the background image e.g. body #container'),
     '#default_value' => isset($default['selector']) ? $default['selector'] : '',
   );
 

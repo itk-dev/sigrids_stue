@@ -1,14 +1,35 @@
 <?php
 
+/**
+ * @file
+ * This module provides the node adminitrators with the option to use different
+ * dynamic background images for each node.
+ */
+
+/**
+ * Implementation of hook_perm().
+ */
+function dynamic_background_node_perm() {
+  return array(
+     'configure dynamic background nodes',
+    );
+ }
+
+/**
+ * Implementation of hook_menu(). Hooks into the dynamic background modules menu
+ * structure and adds the "nodes" menu tab to the administration interface.
+ *
+ * @return array menu items
+ */
 function dynamic_background_node_menu() {
   $items = array();
 
   $items['admin/build/backgrounds/nodes'] = array(
     'title' => 'Nodes',
-    'description' => t('Configure dynamic backgrounds nodes'),
+    'description' => t('Configure dynamic background nodes'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('dynamic_background_node_admin_form'),
-    'access arguments' => array('configure dynamic backgrounds nodes'),
+    'access arguments' => array('configure dynamic background nodes'),
     'type' => MENU_LOCAL_TASK,
     'weight' => -10,
   );
@@ -16,8 +37,13 @@ function dynamic_background_node_menu() {
   return $items;
 }
 
-
-function dynamic_background_node_admin_form($form) {
+/**
+ * Build the administration interface for dynamic background nodes and enables
+ * administrators to select which content types have enable background selection.
+ *
+ * @return array $form
+ */
+function dynamic_background_node_admin_form() {
   $form = array(
     '#tree' => TRUE,
   );
@@ -26,7 +52,7 @@ function dynamic_background_node_admin_form($form) {
   $options = array();
   $types = node_get_types();
   foreach ($types as $key => $type) {
-    $options[$key] = $type->name . ' (' .t(check_plain($type->description)) . ')';
+    $options[$key] = $type->name . ' (' . t(check_plain($type->description)) . ')';
   }
 
   $defaults = variable_get('dynamic_background_node', array());
@@ -59,7 +85,7 @@ function dynamic_background_node_admin_form($form) {
   $form['dynamic_background_node_css']['selector'] = array(
     '#type' => 'textfield',
     '#title' => t('CSS selector'),
-    '#description' => t('The CSS selector string to target with the background image.'),
+    '#description' => t('The CSS selector string to target with the background image e.g. body #container'),
     '#default_value' => isset($defaults['selector']) ? $defaults['selector'] : '',
   );
 
@@ -73,6 +99,14 @@ function dynamic_background_node_admin_form($form) {
   return system_settings_form($form);
 }
 
+/**
+ * Hooks into the selected content types an insert a form selection option of
+ * background images uploaded by the site administrator.
+ *
+ * @param array $form
+ * @param array $form_state
+ * @param string $form_id
+ */
 function dynamic_background_node_form_alter(&$form, &$form_state, $form_id) {
   $settings = variable_get('dynamic_background_node', array());
   if (isset($settings['content_types']) && $settings['content_types'][$form['type']['#value']]) {
@@ -103,10 +137,15 @@ function dynamic_background_node_form_alter(&$form, &$form_state, $form_id) {
       }
     }
 
+    // Add some style to the image selection.
     drupal_add_css(drupal_get_path('module', 'dynamic_background_node') . '/css/dynamic_background_node.admin.css');
   }
 }
 
+/**
+ * Implementation of hook_nodeapi(), which is used to save and load information
+ * about the image selected for a given node.
+ */
 function dynamic_background_node_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
   $settings = variable_get('dynamic_background_node', array());
   if (isset($settings['content_types']) && $settings['content_types'][$node->type]) {
@@ -131,8 +170,13 @@ function dynamic_background_node_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
   }
 }
 
+/**
+ * Implementation of hook_preprocess_page(), which generates the correct pice of
+ * css and inserts into the $vars['styles'] array. It also creates the variable
+ * $background_node, which can be used in page.tpl.php.
+ */
 function dynamic_background_node_preprocess_page(&$vars) {
-  // Find the active image
+  // Find the selected image id.
   if (isset($vars['node']) && isset($vars['node']->dynamic_background)) {
     $node = $vars['node'];
     $image_id = NULL;
@@ -143,12 +187,13 @@ function dynamic_background_node_preprocess_page(&$vars) {
       }
     }
 
+    // Generate the css based in the image id.
     if ($image_id) {
       $backgrounds = variable_get('dynamic_background_images', array());
       if (isset($backgrounds[$image_id])) {
         $css = dynamic_background_create_css($backgrounds[$image_id]['default'], 'dynamic_background_node_css');
         if ($css) {
-          $vars['styles'] .= '<style type="text/css">'.$css.'</style>';
+          $vars['styles'] .= '<style type="text/css">' . $css . '</style>';
         }
         $vars['background_node'] = 'style="background-image: url(\'/' . $backgrounds[$image_id]['default'] . '\')"';
       }

@@ -1,10 +1,27 @@
 <?php
 
 /**
+ * Implementation of hook_install().
+ */
+function dynamic_background_install() {
+  // Make this module's weight heavy, so it runs less and other modules.
+  db_query("UPDATE {system} SET weight = 200 WHERE type = 'module' AND name = 'dynamic_background'");
+}
+
+/**
  * Implementation of hook_uninstall().
  */
 function dynamic_background_uninstall() {
   variable_del('dynamic_background_setting');
   variable_del('dynamic_background_images');
   variable_del('dynamic_background_active');
+}
+
+/**
+ * Update module weight to handle modules as less.
+ */
+function dynamic_background_update_6001() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {system} SET weight = 200 WHERE type = 'module' AND name = 'dynamic_background'");
+  return $ret;
 }
