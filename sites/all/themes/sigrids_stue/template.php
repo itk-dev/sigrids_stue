@@ -23,6 +23,11 @@ function sigrids_stue_preprocess_page(&$vars) {
 
   global $theme_info;
 
+  // Add IE 8 meta tag
+  drupal_set_html_head('<meta http-equiv="x-ua-compatible" content="IE=8">');
+  // Make sure $head is updated in page.tpl.php see: http://api.drupal.org/api/drupal/includes--common.inc/function/drupal_set_html_head/6#comment-4614
+  $vars['head'] = drupal_get_html_head();
+
   // Get the path to the theme to make the code more efficient and simple.
   $path = drupal_get_path('theme', $theme_info->name);
 
