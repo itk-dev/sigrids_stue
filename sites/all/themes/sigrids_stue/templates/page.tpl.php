@@ -49,7 +49,12 @@
         </div>
       <?php endif ?>
 
-      <div id="main" class="<?php print ns('grid-12', $left && !$right, 4, $left && $right, 3, $right && !$left, 4, $right && $left, 3, 'rc', 9); ?> alpha omega">
+      <?php if ($is_front): ?>
+        <div id="main" class="<?php print ns('grid-8', $left && !$right, 4, $left && $right, 3, $right && !$left, 4, $right && $left, 3, 'rc', 9); ?> alpha omega">
+      <?php endif ?>
+      <?php if (!$is_front): ?>
+        <div id="main" class="<?php print ns('grid-12', $left && !$right, 4, $left && $right, 3, $right && !$left, 4, $right && $left, 3, 'rc', 9); ?> alpha omega">
+      <?php endif ?>
         <div id="main-inner">
           <?php print $messages; ?>
           <?php print $help; ?>
