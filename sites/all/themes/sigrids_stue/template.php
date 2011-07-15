@@ -63,11 +63,25 @@ function sigrids_stue_links($links, $attributes = array('class' => 'links')) {
   global $language;
   $output = '';
 
+  var_dump($links);
+
   // Comment hack
   if ($attributes['class'] == 'links inline') {
     if (isset($links['comment_add']) && !isset($links['comment_comments'])) {
-      $links['comment_add']['title'] = t('0 comments');
-      $links['comment_add']['attributes']['title'] = t('0 comments');
+      // Find nid and remove add link.
+      $nid = split('/', $links['comment_add']['href']);
+      $nid = $nid[2];
+      unset($links['comment_add']);
+
+      // Update information
+      $links['comment_comments'] = array(
+        'title' => t('0 comments'),
+        'href' => 'node/' . $nid,
+        'attributes' => array(
+          'title' => t('Jump to the first comment of this posting.')
+        ),
+        'fragment' => 'comments',
+      );
     }
     unset($links['comment_new_comments']);
   }
