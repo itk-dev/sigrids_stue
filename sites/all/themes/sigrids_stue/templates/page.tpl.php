@@ -49,6 +49,10 @@
         </div>
       <?php endif ?>
 
+      <?php if ($content_top): ?>
+        <div id="content-top" class="grid-8 alpha omega"><?php print $content_top ?></div>
+      <?php endif; ?>
+
       <?php if ($is_front): ?>
         <div id="main" class="<?php print ns('grid-8', $left && !$right, 4, $left && $right, 3, $right && !$left, 4, $right && $left, 3, 'rc', 9); ?> alpha omega">
       <?php endif ?>
@@ -67,9 +71,6 @@
 
           <?php if (!empty($title)): ?><h1 class="title" id="page-title"><?php print $title; ?></h1><?php endif; ?>
 
-          <?php if ($content_top): ?>
-            <div id="content-top" class="region"><?php print $content_top ?></div>
-          <?php endif; ?>
           <div id="content" class=""><?php print $content ?></div>
       </div>
 

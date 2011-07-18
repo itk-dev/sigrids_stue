@@ -136,3 +136,13 @@ function sigrids_stue_links($links, $attributes = array('class' => 'links')) {
 
   return $output;
 }
+
+
+/**
+ * Views Slideshow: "pause" control.
+ *
+ * @ingroup themeable
+ */
+function sigrids_stue_views_slideshow_singleframe_control_pause($vss_id, $view, $options) {
+  // Remove pause button
+}
