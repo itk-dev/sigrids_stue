@@ -80,6 +80,7 @@ body {
   margin: 0 -10px 20px 10px;
 }
 
+.node-user #main-inner,
 .page-blog #main-inner,
 .node-type-blog-post #main-inner {
   .background-white(0.8);
@@ -222,27 +223,39 @@ body {
 
 /* !----- / Carousel ----- */
 
-.slideshow {
+.view-slideshow {
   background-color: transparent;
   max-width: 620px;
+  position: relative;
 }
 
-.slideshow .views_slideshow_singleframe_teaser_section {
-  height: 300px;
-}
-
-.slideshow .views_slideshow_singleframe_pager .pager-item a,
-.slideshow .views_slideshow_singleframe_pager .pager-item.activeSlide a {
-  text-indent: 0px;
-}
-
-.block-views .view div.views_slideshow_slide {
+.view-slideshow div.views_slideshow_slide {
    height: 250px;
    width: 620px;
 }
 
-.block-views .view div.views_slideshow_slide a {
-  float: left;
+.view-slideshow .views-slideshow-controls-top {
+  position: absolute;
+  top: 110px;
+  width: 100%;
+}
+
+.view-slideshow .views-slideshow-controls-top a {
+  background: url('../images/sigrids-stue-sprites.png') no-repeat 0 -96px;
+  display: block;
+  height: 27px;
+  left: 20px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: -10000px;
+  width: 26px;
+  z-index: 5;
+}
+
+.view-slideshow .views-slideshow-controls-top a.views_slideshow_next {
+  background-position: -974px -96px;
+  left: auto;
+  right: 20px;
 }
 
 /* !----- / Overwrite default loader ----- */
@@ -457,4 +470,10 @@ html.js input.form-autocomplete {
 
 html.js input.throbbing {
   background-position: 100% -13px;
+}
+
+/* ----- / Tabs ----- */
+
+.tabs {
+  padding: 1px 0 0;
 }
