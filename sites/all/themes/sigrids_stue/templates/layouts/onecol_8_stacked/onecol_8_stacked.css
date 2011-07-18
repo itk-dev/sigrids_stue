@@ -1,0 +1,6 @@
+#panels-dnd-main .panel-col-top,
+#panels-dnd-main .panel-col-middle {
+  clear: both;
+  margin-bottom: 1em;
+  width: 100%;
+}

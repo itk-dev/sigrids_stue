@@ -10,7 +10,6 @@ base theme = "replicator"
 regions[topbar] = Topbar
 regions[header] = Header
 regions[top_region] = Top
-regions[content_top] = Content, Above
 regions[content] = Content
 regions[content_bottom] = Content, Below
 regions[left] = Left

@@ -25,6 +25,8 @@
     </div>
   <?php endif; ?>
 
+  <?php print $title; ?>
+
   <?php if ($feeds): ?>
     <div class="feed">
       <?php print $feeds; ?>

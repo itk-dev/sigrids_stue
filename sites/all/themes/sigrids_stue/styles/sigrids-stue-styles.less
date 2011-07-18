@@ -76,18 +76,17 @@ body {
 }
 
 #main-inner {
-  .background-white(0.8);
   overflow: hidden;
   margin: 0 -10px 20px 10px;
+}
+
+.page-blog #main-inner,
+.node-type-blog-post #main-inner {
+  .background-white(0.8);
   padding: 20px;
 }
 
 /* !----- / Content ----- */
-
-#content-top {
-  margin: 0 0 20px;
-  padding: 0 0 0 20px;
-}
 
 #content .content {
   padding: 0;
@@ -101,6 +100,15 @@ body {
 #content .content .imagecache-page-image {
   float: left;
   margin: 5px 10px 5px 0;
+}
+
+#content .pane-node-content {
+  .background-white(0.8);
+  padding: 20px;
+}
+
+#content .panel-col-top {
+  margin: 0 0 20px;
 }
 
 /* !----- / Secondary menu, language switch and Facebook link ----- */
