@@ -6,8 +6,25 @@ if (theme_get_setting('sigrids_stue_rebuild_registry')) {
 }
 
 /**
- * Implementation of preprocess_comment
- * Change submitted data and add comment counter
+ * Implementation of preprocess_views_slideshow_singleframe.
+ * Change submitted data and add comment counter.
+ * Don't show Slideshow when view returns empty result.
+ */
+function sigrids_stue_preprocess_views_slideshow_singleframe(&$vars) {  
+  $empty = FALSE;
+  foreach ($vars['view']->result[0] as $attr => $value){
+    if ($attr == 'node_data_field_images_field_images_fid' && empty($value)) {
+      $empty = TRUE;
+    }
+  }
+  if($empty){
+    unset($vars['view']->result);
+  }
+}
+
+/**
+ * Implementation of preprocess_comment.
+ * Change submitted data and add comment counter.
  */
 function sigrids_stue_preprocess_comment(&$variables){
   static $depths_counter;
@@ -23,20 +40,20 @@ function sigrids_stue_preprocess_page(&$vars) {
 
   global $theme_info;
 
-  // Add IE 8 meta tag
+  // Add IE 8 meta tag.
   drupal_set_html_head('<meta http-equiv="x-ua-compatible" content="IE=8">');
-  // Make sure $head is updated in page.tpl.php see: http://api.drupal.org/api/drupal/includes--common.inc/function/drupal_set_html_head/6#comment-4614
+  // Make sure $head is updated in page.tpl.php see: http://api.drupal.org/api/drupal/includes--common.inc/function/drupal_set_html_head/6#comment-4614.
   $vars['head'] = drupal_get_html_head();
 
   // Get the path to the theme to make the code more efficient and simple.
   $path = drupal_get_path('theme', $theme_info->name);
 
   // conditional styles
-  // xpressions documentation  -> http://msdn.microsoft.com/en-us/library/ms537512.aspx
+  // xpressions documentation  -> http://msdn.microsoft.com/en-us/library/ms537512.aspx.
 
-  // syntax for .info
-  // top stylesheets[all][] = style/reset.css
-  // ie stylesheets[ condition ][all][] = ie6.css
+  // syntax for .info.
+  // top stylesheets[all][] = style/reset.css.
+  // ie stylesheets[ condition ][all][] = ie6.css.
   // ------------------------------------------------------------------------
 
   // Check for IE conditional stylesheets.
@@ -52,7 +69,7 @@ function sigrids_stue_preprocess_page(&$vars) {
         }
       }
     }
-    // Append the stylesheets to $styles, grouping by IE version and applying
+    // Append the stylesheets to $styles, grouping by IE version and applying.
     // the proper wrapper.
     foreach ($ie_css as $condition => $styles) {
       $vars['styles'] .= '<!--[' . $condition . ']>' . "\n" . drupal_get_css($styles) . '<![endif]-->' . "\n";
@@ -68,7 +85,7 @@ function sigrids_stue_links($links, $attributes = array('class' => 'links')) {
   global $language;
   $output = '';
 
-  // Comment hack
+  // Comment hack.
   if ($attributes['class'] == 'links inline') {
     if (isset($links['comment_add']) && !isset($links['comment_comments'])) {
       // Find nid and remove add link.
@@ -116,7 +133,7 @@ function sigrids_stue_links($links, $attributes = array('class' => 'links')) {
         $output .= l($link['title'], $link['href'], $link);
       }
       else if (!empty($link['title'])) {
-        // Some links are actually not links, but we wrap these in <span> for adding title and class attributes
+        // Some links are actually not links, but we wrap these in <span> for adding title and class attributes.
         if (empty($link['html'])) {
           $link['title'] = check_plain($link['title']);
         }
@@ -141,8 +158,8 @@ function sigrids_stue_links($links, $attributes = array('class' => 'links')) {
 /**
  * Views Slideshow: "pause" control.
  *
- * @ingroup themeable
+ * @ingroup themeable.
  */
 function sigrids_stue_views_slideshow_singleframe_control_pause($vss_id, $view, $options) {
-  // Remove pause button
+  // Remove pause button.
 }
