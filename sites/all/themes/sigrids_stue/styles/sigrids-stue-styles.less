@@ -476,5 +476,25 @@ html.js input.throbbing {
 /* ----- / Tabs ----- */
 
 .tabs {
-  padding: 1px 0 0 10px;
+  margin: 0 -10px 0 0;
+  padding: 0 0 0 10px;
+}
+
+ul.tabs.primary {
+  border: 0;
+  margin: 0;
+  overflow: hidden;
+  padding: 1px 0 0;
+}
+
+ul.primary li a {
+  display: block;
+  float: left;
+  padding: 5px 10px;
+}
+
+ul.primary li.active a {
+  .background-white(.75);
+  border: 0;
+  padding: 5px 10px 6px;
 }
