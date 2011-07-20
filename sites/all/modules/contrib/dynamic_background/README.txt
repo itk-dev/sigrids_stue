@@ -10,12 +10,20 @@ in page.tpl.php or as the path /background.css. The variable can be placed
 in the body tag in page.tpl.php and the css can be added to your themes info
 file.
 
-From 6.x-1.1 you don't have to add the variable to your templet files, if you
-use the CSS behaviour fields in the administration interface. The new release
-has a sub-module, that enables you to select a different background image for
-each node among the uploaded images. You can use the CSS selector to ensure
-that, if no image is selected in the node, that the module falls back to the one
-selected in the administration interface.
+Release 6.x-1.1
+You don't have to add the variable $background to your template files, if you
+use the CSS behaviour fields in the administration interface. This release has a
+sub-module, that enables you to select a different background image for each
+node among the uploaded images. You can use the CSS selectors to ensure, if no
+image is selected in the node, that the module falls back to the one selected in
+the administration interface.
+
+Release 6.x-1.2
+This release has a sub-module, that enables you to select a different a
+background image for each panel variant among the uploaded images. As with node
+background you can use CSS selectors to ensure, if no image is selected in the
+node, that the module falls back to the one selected in the administration
+interface.
 
 Requirements
 ------------

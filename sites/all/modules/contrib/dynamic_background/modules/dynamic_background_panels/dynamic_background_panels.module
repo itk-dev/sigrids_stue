@@ -1,0 +1,161 @@
+<?php
+
+/*
+ * @file
+ * Alters the panels variant "General" form to enable users to select a dynamic
+ * background image any given panel variant.
+ */
+
+/**
+ * Implementation of hook_perm().
+ */
+function dynamic_background_panels_perm() {
+  return array(
+    'configure panels dynamic background',
+  );
+}
+
+/**
+ * Implementation of hook_menu(). Hooks into the dynamic background modules menu
+ * structure and adds the "nodes" menu tab to the administration interface.
+ *
+ * @return array menu items
+ */
+function dynamic_background_panels_menu() {
+  $items = array();
+
+  $items['admin/build/backgrounds/panels'] = array(
+    'title' => 'Panels',
+    'description' => t('Configure dynamic background nodes'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dynamic_background_panels_admin_form'),
+    'access arguments' => array('configure panels dynamic background'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -10,
+  );
+
+  return $items;
+}
+
+/**
+ * Build the administration interface for dynamic background panels and enables
+ * administrators enter css to used for insertion of backgrounds.
+ *
+ * @return array $form
+ */
+function dynamic_background_panels_admin_form() {
+  $form = array(
+    '#tree' => TRUE,
+  );
+
+  $defaults = variable_get('dynamic_background_panels', array());
+  $form['dynamic_background_panels'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('CSS behaviour'),
+      '#collapsed' => FALSE,
+      '#collapsible' => TRUE,
+  );
+  
+  $form['dynamic_background_panels']['selector'] = array(
+    '#type' => 'textfield',
+    '#title' => t('CSS selector'),
+    '#description' => t('The CSS selector string to target with the background image e.g. body #container'),
+    '#default_value' => isset($defaults['selector']) ? $defaults['selector'] : '',
+  );
+
+  $form['dynamic_background_panels']['css'] = array(
+    '#type' => 'textarea',
+    '#title' => t('CSS'),
+    '#description' => t('The CSS to insert with the background image e.g background-size: cover;.'),
+    '#default_value' => isset($defaults['css']) ? $defaults['css'] : '',
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function dynamic_background_panels_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id == 'panels_panel_context_edit_settings') {
+
+    // Add some styling and javascript to ensure single image selection.
+    drupal_add_css(drupal_get_path('module', 'dynamic_background_panels') . '/css/dynamic_background_panels.admin.css', 'module');
+    drupal_add_js(drupal_get_path('module', 'dynamic_background_panels') . '/js/dynamic_background_panels.js', 'module');
+
+    // Add fieldset.
+    $form['conf']['dynamic_background'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Dynamic background'),
+      '#description' => t('To used this feature setup dynamic background and upload images.'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#tree' => TRUE,
+    );
+
+    // Load avaliable images.
+    $images = variable_get('dynamic_background_images', array());
+    foreach ($images as $id => $image) {
+      if (isset($image['default'])) {
+        // Create thumbnail.
+        $picture = theme('imagecache', 'dynamic_background_thumb', $image['default'], t('Image preview'), t('Image preview'), NULL);
+
+        // Build for element.
+        $form['conf']['dynamic_background'][$id]['image'] = array(
+          '#value' => $picture,
+          '#prefix' => '<div class="dynamic-background-picture">',
+        );
+
+        $form['conf']['dynamic_background'][$id]['selected'] = array(
+          '#type' => 'checkbox',
+          '#title' => t('Use background'),
+          '#default_value' => isset($form_state['handler']->conf['dynamic_background'][$id]['selected']) ? $form_state['handler']->conf['dynamic_background'][$id]['selected'] : '',
+          '#suffix' => '</div>',
+        );
+      }
+    }
+    
+    // Add extra submit handler.
+    $form['#submit'][] = 'dynamic_background_panels_conf_submit_handler';
+  }
+}
+
+/*
+ * Ensures that the configuration form panels is saved.
+ */
+function dynamic_background_panels_conf_submit_handler(&$form, &$form_state) {
+  $form_state['handler']->conf['dynamic_background'] = $form_state['values']['dynamic_background'];
+}
+
+
+/**
+ * Implementation of hook_preprocess_page(), which generates the correct pice of
+ * css and inserts into the $vars['styles'] array. It also creates the variable
+ * $background_node, which can be used in page.tpl.php.
+ */
+function dynamic_background_panels_preprocess_page(&$vars) {
+  // If the current page has a panel, try to use dynamic background.
+  $image_id = NULL;
+  if ($pm_page = page_manager_get_current_page()) {
+    if (isset($pm_page['handler']->conf['dynamic_background'])) {
+      foreach ($pm_page['handler']->conf['dynamic_background'] as $key => $value) {
+        if ($value['selected']) {
+          $image_id = $key;
+          break;
+        }
+      }
+    }
+  }
+
+  // Generate the css based in the image id.
+  if (!is_null($image_id)) {
+    $backgrounds = variable_get('dynamic_background_images', array());
+    if (isset($backgrounds[$image_id])) {
+      $css = dynamic_background_create_css($backgrounds[$image_id]['default'], 'dynamic_background_panels');
+      if ($css) {
+        $vars['styles'] .= '<style type="text/css">' . $css . '</style>';
+      }
+      $vars['background_panel'] = 'style="background-image: url(\'/' . $backgrounds[$image_id]['default'] . '\')"';
+    }
+  }
+}

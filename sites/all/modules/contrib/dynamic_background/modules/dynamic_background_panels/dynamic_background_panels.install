@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Handles install and uninstall of the module.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function dynamic_background_panels_install() {
+  // Make this module's weight heavy, so it overrides dynamic background main module.
+  db_query("UPDATE {system} SET weight = 220 WHERE type = 'module' AND name = 'dynamic_background_panels'");
+}
+
+/**
+ * Implementation of hook_uninstall():
+ */
+function dynamic_background_panels_uninstall() {
+  // Remove settings.
+  variable_del('dynamic_background_panels');
+}

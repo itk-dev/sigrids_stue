@@ -138,7 +138,8 @@ function dynamic_background_node_form_alter(&$form, &$form_state, $form_id) {
     }
 
     // Add some style to the image selection.
-    drupal_add_css(drupal_get_path('module', 'dynamic_background_node') . '/css/dynamic_background_node.admin.css');
+    drupal_add_css(drupal_get_path('module', 'dynamic_background_node') . '/css/dynamic_background_node.admin.css', 'module');
+    drupal_add_js(drupal_get_path('module', 'dynamic_background_node') . '/js/dynamic_background_node.js', 'module');
   }
 }
 
@@ -177,6 +178,7 @@ function dynamic_background_node_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
  */
 function dynamic_background_node_preprocess_page(&$vars) {
   // Find the selected image id.
+  $image_id = NULL;
   if (isset($vars['node']) && isset($vars['node']->dynamic_background)) {
     $node = $vars['node'];
     $image_id = NULL;
@@ -188,7 +190,7 @@ function dynamic_background_node_preprocess_page(&$vars) {
     }
 
     // Generate the css based in the image id.
-    if ($image_id) {
+    if (!is_null($image_id)) {
       $backgrounds = variable_get('dynamic_background_images', array());
       if (isset($backgrounds[$image_id])) {
         $css = dynamic_background_create_css($backgrounds[$image_id]['default'], 'dynamic_background_node_css');

@@ -1,5 +1,5 @@
-name = Dynamic background node
-description = Allows users to select uploaded backgrounds for nodes.
+name = Dynamic background panels
+description = Enables the use of dynamic backgrounds on panels (different backgrounds).
 package = Dynamic background
 core = 6.x
 dependencies[] = imagecache

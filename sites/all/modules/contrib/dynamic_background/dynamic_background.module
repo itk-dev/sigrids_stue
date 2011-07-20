@@ -16,11 +16,11 @@ module_load_include('inc', 'dynamic_background', 'includes/upload.form');
  */
 function dynamic_background_perm() {
   return array(
-     'configure dynamic backgrounds',
-     'set dynamic backgrounds',
-     'dynamic backgrounds css',
-    );
- }
+    'configure dynamic backgrounds',
+    'set dynamic backgrounds',
+    'dynamic backgrounds css',
+  );
+}
 
 /**
  * Implementation of hook_menu().
