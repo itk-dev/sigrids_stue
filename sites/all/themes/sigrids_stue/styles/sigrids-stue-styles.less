@@ -287,8 +287,49 @@ textarea, input[type="text"], input[type="password"] {
   padding: 7px;
 }
 
+#content-bottom .block input[type="text"], #content-bottom .block input[type="password"] {
+  width: 95%;
+}
+
+input[type="submit"] {
+  margin: 10px 0 0;
+}
+
 input.form-autocomplete {
   padding: 6px;
+}
+
+#content-bottom {
+  .block {
+    .form-item {
+      margin: 0;
+    }
+  }
+  input[type="submit"] {
+    float: right;
+  }
+}
+
+/* !----- / Blocks ----- */
+
+#content-bottom .block {
+  margin-bottom: 20px;
+}
+
+#content-bottom .block h2 {
+  .background-white(0.8);
+}
+
+#content-bottom .block h2 {
+  margin: 0;
+  padding: 20px 20px 15px;
+}
+
+#content-bottom .block .content {
+  .background-white(0.8);
+  min-height: 65px;
+  overflow: auto;
+  padding: 0 20px 20px 20px;
 }
 
 /* !----- / Spotbox ----- */
@@ -320,6 +361,12 @@ input.form-autocomplete {
 .nodespotbox .content-wrapper {
   min-height: 65px;
   padding: 0 20px 20px 20px;
+}
+
+#content-bottom .nodespotbox .content {
+  background: none;
+  min-height: auto;
+  padding: 0;
 }
 
 .nodespotbox .content-wrapper p {
