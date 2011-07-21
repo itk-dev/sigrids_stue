@@ -84,7 +84,6 @@ body {
 .page-admin #main-inner,
 .page-blog #main-inner,
 .page-user #main-inner,
-.page-node #main-inner,
 .node-type-blog-post #main-inner {
   .background-white(0.8);
   padding: 20px;
@@ -126,11 +125,13 @@ body {
 
 /* !----- / Secondary menu, language switch and Facebook link ----- */
 
-#block-menu-secondary-links {
+#block-menu-secondary-links,
+#block-menu-secondary-links-en {
   right: 0;
 }
 
 #block-menu-secondary-links,
+#block-menu-secondary-links-en,
 .block-langswitch,
 .header .block a.facebook {
   float: right;
@@ -140,6 +141,7 @@ body {
 }
 
 #block-menu-secondary-links li,
+#block-menu-secondary-links-en li,
 .block-langswitch li {
   padding: 0;
 }
