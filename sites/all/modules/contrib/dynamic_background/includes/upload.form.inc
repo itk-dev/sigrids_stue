@@ -5,7 +5,6 @@
  * The functions here is used to create an new form element
  * (background_upload_form), which can be used to upload images. It also gives
  * the possibility to flag a image for deletion or active background image.
- *
  */
 
 /**
@@ -61,8 +60,8 @@ function dynamic_background_upload_form_process($element, $form_state) {
       $element['#value'] = array_merge($element['#value'], $element['#default_value']);
     }
   }
-  
-  // If image is already uploaded
+
+  // If image is already uploaded.
   if (isset($element['#value']['default'])) {
     // Create image preview thumbnail, using imagecache.
     $picture = theme('imagecache', 'dynamic_background_thumb', $element['#value']['default'], t('Image preview'), t('Image preview'), NULL);
@@ -84,7 +83,7 @@ function dynamic_background_upload_form_process($element, $form_state) {
       '#type' => 'checkbox',
       '#title' => t('Delete picture'),
       '#default_value' => $element['#value']['picture_delete'],
-     );
+    );
   }
   else {
     // No image uploaded, so display image upload field.

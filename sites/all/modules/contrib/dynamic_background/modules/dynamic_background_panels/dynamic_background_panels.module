@@ -26,7 +26,7 @@ function dynamic_background_panels_menu() {
 
   $items['admin/build/backgrounds/panels'] = array(
     'title' => 'Panels',
-    'description' => t('Configure dynamic background nodes'),
+    'description' => t('Configure dynamic background penels'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('dynamic_background_panels_admin_form'),
     'access arguments' => array('configure panels dynamic background'),
@@ -55,7 +55,7 @@ function dynamic_background_panels_admin_form() {
       '#collapsed' => FALSE,
       '#collapsible' => TRUE,
   );
-  
+
   $form['dynamic_background_panels']['selector'] = array(
     '#type' => 'textfield',
     '#title' => t('CSS selector'),
@@ -114,7 +114,7 @@ function dynamic_background_panels_form_alter(&$form, $form_state, $form_id) {
         );
       }
     }
-    
+
     // Add extra submit handler.
     $form['#submit'][] = 'dynamic_background_panels_conf_submit_handler';
   }

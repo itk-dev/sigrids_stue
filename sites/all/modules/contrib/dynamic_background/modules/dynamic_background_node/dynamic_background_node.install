@@ -34,6 +34,10 @@ function dynamic_background_node_schema() {
         'not null' => TRUE,
       ),
     ),
+    'indexes' => array(
+      'nid' => array('nid'),
+      'vid' => array('vid'),
+    ),
   );
 
   return $schema;
@@ -47,6 +51,15 @@ function dynamic_background_node_install() {
 
   // Make this module's weight heavy, so it overrides dynamic background main module.
   db_query("UPDATE {system} SET weight = 210 WHERE type = 'module' AND name = 'dynamic_background_node'");
+}
+
+/**
+ * Update module weight to handle modules as less.
+ */
+function dynamic_background_node_update_6001() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {system} SET weight = 210 WHERE type = 'module' AND name = 'dynamic_background_node'");
+  return $ret;
 }
 
 /**

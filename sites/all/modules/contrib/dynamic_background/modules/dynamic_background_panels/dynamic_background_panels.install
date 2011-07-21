@@ -20,3 +20,12 @@ function dynamic_background_panels_uninstall() {
   // Remove settings.
   variable_del('dynamic_background_panels');
 }
+
+/**
+ * Update module weight to handle modules as less.
+ */
+function dynamic_background_panels_update_6001() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {system} SET weight = 220 WHERE type = 'module' AND name = 'dynamic_background_panels'");
+  return $ret;
+}

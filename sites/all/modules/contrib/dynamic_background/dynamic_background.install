@@ -1,6 +1,12 @@
 <?php
 
 /**
+ * @file
+ * Handles the install and uninstall process for the module setting module
+ * weight and removes variables used by dynamic background.
+ */
+
+/**
  * Implementation of hook_install().
  */
 function dynamic_background_install() {

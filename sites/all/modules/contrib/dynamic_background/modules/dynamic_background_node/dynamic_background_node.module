@@ -12,8 +12,9 @@
 function dynamic_background_node_perm() {
   return array(
      'configure dynamic background nodes',
+     'select node background image',
     );
- }
+}
 
 /**
  * Implementation of hook_menu(). Hooks into the dynamic background modules menu
@@ -108,38 +109,40 @@ function dynamic_background_node_admin_form() {
  * @param string $form_id
  */
 function dynamic_background_node_form_alter(&$form, &$form_state, $form_id) {
-  $settings = variable_get('dynamic_background_node', array());
-  if (isset($settings['content_types']) && $settings['content_types'][$form['type']['#value']]) {
-    $form['dynamic_background'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Node background'),
-      '#collapsed' => FALSE,
-      '#collapsible' => TRUE,
-      '#tree' => TRUE,
-    );
+  if (user_access('select node background image')) {
+    $settings = variable_get('dynamic_background_node', array());
+    if (isset($settings['content_types']) && $settings['content_types'][$form['type']['#value']]) {
+      $form['dynamic_background'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Node background'),
+        '#collapsed' => FALSE,
+        '#collapsible' => TRUE,
+        '#tree' => TRUE,
+      );
 
-    $images = variable_get('dynamic_background_images', array());
-    foreach ($images as $key => $image) {
-      if (isset($image['default'])) {
-        $picture = theme('imagecache', 'dynamic_background_thumb', $image['default'], t('Image preview'), t('Image preview'), NULL);
-        $form['dynamic_background'][$key]['image'] = array(
-          '#value' => $picture,
-          '#prefix' => '<div class="dynamic-background-picture">',
-        );
+      $images = variable_get('dynamic_background_images', array());
+      foreach ($images as $key => $image) {
+        if (isset($image['default'])) {
+          $picture = theme('imagecache', 'dynamic_background_thumb', $image['default'], t('Image preview'), t('Image preview'), NULL);
+          $form['dynamic_background'][$key]['image'] = array(
+            '#value' => $picture,
+            '#prefix' => '<div class="dynamic-background-picture">',
+          );
 
-        $value = isset($form['#node']->dynamic_background[$key]['selected']) ? $form['#node']->dynamic_background[$key]['selected'] : 0;
-        $form['dynamic_background'][$key]['selected'] = array(
-          '#type' => 'checkbox',
-          '#title' => t('Use as background'),
-          '#default_value' => $value,
-          '#suffix' => '</div>',
-        );
+          $value = isset($form['#node']->dynamic_background[$key]['selected']) ? $form['#node']->dynamic_background[$key]['selected'] : 0;
+          $form['dynamic_background'][$key]['selected'] = array(
+            '#type' => 'checkbox',
+            '#title' => t('Use background'),
+            '#default_value' => $value,
+            '#suffix' => '</div>',
+          );
+        }
       }
-    }
 
-    // Add some style to the image selection.
-    drupal_add_css(drupal_get_path('module', 'dynamic_background_node') . '/css/dynamic_background_node.admin.css', 'module');
-    drupal_add_js(drupal_get_path('module', 'dynamic_background_node') . '/js/dynamic_background_node.js', 'module');
+      // Add some style to the image selection.
+      drupal_add_css(drupal_get_path('module', 'dynamic_background_node') . '/css/dynamic_background_node.admin.css', 'module');
+      drupal_add_js(drupal_get_path('module', 'dynamic_background_node') . '/js/dynamic_background_node.js', 'module');
+    }
   }
 }
 
@@ -152,16 +155,21 @@ function dynamic_background_node_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
   if (isset($settings['content_types']) && $settings['content_types'][$node->type]) {
     switch ($op) {
       case 'load':
-        $result = db_query('SELECT data FROM {dynamic_background_node} WHERE nid=%d AND vid=%d', $node->nid, $node->vid);
-        $result = db_fetch_object($result)->data;
-        if ($result) {
-          $node->dynamic_background = unserialize($result);
+        $data = dynamic_background_node_get_data($node->nid, $node->vid);
+        if ($data) {
+          $node->dynamic_background = $data;
         }
         break;
 
       case 'insert':
       case 'update':
-        db_query('INSERT INTO {dynamic_background_node} VALUES (%d, %d, "%s")', $node->nid, $node->vid, serialize($node->dynamic_background));
+        $data = dynamic_background_node_get_data($node->nid, $node->vid);
+        if ($data) {
+          db_query('UPDATE {dynamic_background_node} SET data = "%s", vid = %d WHERE nid = %d', serialize($node->dynamic_background), $node->vid, $node->nid);
+        }
+        else {
+          db_query('INSERT INTO {dynamic_background_node} VALUES (%d, %d, "%s")', $node->nid, $node->vid, serialize($node->dynamic_background));
+        }
         break;
 
       case 'delete':
@@ -169,6 +177,15 @@ function dynamic_background_node_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
         break;
     }
   }
+}
+
+function dynamic_background_node_get_data($nid, $vid) {
+  $result = db_query('SELECT data FROM {dynamic_background_node} WHERE nid=%d AND vid=%d', $nid, $vid);
+  $result = db_fetch_object($result)->data;
+  if ($result) {
+    return unserialize($result);
+  }
+  return NULL;
 }
 
 /**

@@ -3,7 +3,6 @@
 /**
  * @file
  * Implementation of the administration settings form for the module.
- * 
  */
 
 /**
@@ -58,7 +57,7 @@ function dynamic_background_admin_settings() {
   $form['dynamic_background_css']['selector'] = array(
     '#type' => 'textfield',
     '#title' => t('CSS selector'),
-    '#description' => t('The CSS selector string to target with the background image e.g. body #container'),
+    '#description' => t('The CSS selector string to target with the background image e.g. body #container.'),
     '#default_value' => isset($default['selector']) ? $default['selector'] : '',
   );
 
@@ -66,7 +65,7 @@ function dynamic_background_admin_settings() {
     '#type' => 'textarea',
     '#title' => t('CSS'),
     '#description' => t('The CSS to insert with the background image e.g background-size: cover;.'),
-    '#default_value' => isset($default['css']) ? $default['css'] : '',  
+    '#default_value' => isset($default['css']) ? $default['css'] : '',
   );
 
   // Set drupal system settings form and add validation function.
@@ -90,7 +89,4 @@ function dynamic_background_admin_settings_validate($form, &$form_state) {
   if (!file_check_directory($path, FILE_CREATE_DIRECTORY)) {
     form_set_error('path', t('The entered path could not be created.'));
   }
-
-  // Check that extension is only numbers and letters
-  
 }

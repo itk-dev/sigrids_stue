@@ -93,7 +93,7 @@ function dynamic_background_preprocess_page(&$vars) {
   if (isset($background)) {
     $css = dynamic_background_create_css($background);
     if ($css) {
-      $vars['styles'] .= '<style type="text/css">'.$css.'</style>';
+      $vars['styles'] .= '<style type="text/css">' . $css . '</style>';
     }
     $vars['background'] = 'style="background-image: url(\'/' . $background . '\')"';
   }

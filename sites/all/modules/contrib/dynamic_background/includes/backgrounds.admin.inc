@@ -24,7 +24,7 @@ function dynamic_background_admin_images() {
 
   // Load default values
   $default = variable_get('dynamic_background_images', array());
-  
+
   for ($i = 0; $settings['num_of_pictures'] > $i; $i++) {
     $form['dynamic_background_picture_' . $i] = array(
       '#type' => 'background_upload_form',
@@ -32,7 +32,7 @@ function dynamic_background_admin_images() {
       '#default_value' => isset($default[$i]) ? $default[$i] : array(),
     );
   }
-  
+
   // Give it system setting form style.
   $form = system_settings_form($form);
   unset($form['buttons']['reset']);
@@ -67,7 +67,7 @@ function dynamic_background_admin_images_validate($form, &$form_state) {
       }
       if ($file = file_save_upload($file_field, $validators)) {
         $info = image_get_info($file->filepath);
-        $destination = file_directory_path(). '/' . $settings['path'] . '/' . $file->filename;
+        $destination = file_directory_path() . '/' . $settings['path'] . '/' . $file->filename;
 
         // Check if file exists.
         if (file_exists($destination)) {
@@ -80,11 +80,11 @@ function dynamic_background_admin_images_validate($form, &$form_state) {
           $form_state['values'][$file_field]['default'] = $file->filepath;
         }
         else {
-          form_set_error('default', t("Failed to upload the image; the %directory directory doesn't exist or is not writable.", array('%directory' => file_directory_path(). '/' . $settings['path'])));
+          form_set_error('default', t("Failed to upload the image; the %directory directory doesn't exist or is not writable.", array('%directory' => file_directory_path() . '/' . $settings['path'])));
         }
       }
       else {
-       form_set_error('default', t("Failed to upload the image; the image type should be jpeg, jpg or png."));
+        form_set_error('default', t("Failed to upload the image; the image type should be jpeg, jpg or png."));
       }
     }
   }

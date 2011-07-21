@@ -1,0 +1,203 @@
+<?php
+
+/**
+ * @file
+ * This module provides user with the option to select a dynamic background
+ * image for each user.
+ */
+
+
+/**
+ * Implementation of hook_perm().
+ */
+function dynamic_background_user_perm() {
+  return array(
+     'configure user dynamic background',
+     'user selection of background'
+    );
+}
+
+/**
+ * Implementation of hook_menu(). Hooks into the profile with a "My background"
+ * tab, where users can select one of the backgrounds.
+ *
+ * @return array menu items
+ */
+function dynamic_background_user_menu() {
+  $items = array();
+
+  $items['admin/build/backgrounds/user'] = array(
+    'title' => 'User',
+    'description' => t('Configure user dynamic background'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dynamic_background_user_admin_form'),
+    'access arguments' => array('configure user dynamic background'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -10,
+  );
+
+  $items['user/%user/backgrounds'] = array(
+    'title' => 'My background',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dynamic_background_user_form', 1),
+    'access arguments' => array('user selection of background'),
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+/**
+ * Menu callback that generates the form used in the "My background" tab on the
+ * profile page.
+ */
+function dynamic_background_user_form($form, $user) {
+  $form = array(
+    '#tree' => TRUE,
+  );
+
+  // Add hidden field with uid.
+  $form['uid'] = array(
+    '#type' => 'hidden',
+    '#value' => $user->uid,
+  );
+
+  // Create thumbnail image and checkbox for each image.
+  $selected_image = dynamic_background_user_get_image_id($user->uid);
+  $images = variable_get('dynamic_background_images', array());
+  foreach ($images as $key => $image) {
+    if (isset($image['default'])) {
+      $picture = theme('imagecache', 'dynamic_background_thumb', $image['default'], t('Image preview'), t('Image preview'), NULL);
+      $form['dynamic_background'][$key]['image'] = array(
+        '#value' => $picture,
+        '#prefix' => '<div class="dynamic-background-picture">',
+      );
+
+      $form['dynamic_background'][$key]['selected'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Use background'),
+        '#default_value' => (!is_null($selected_image) && $key == $selected_image) ? 1 : 0,
+        '#suffix' => '</div>',
+      );
+    }
+  }
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Update background'),
+  );
+
+  // Add some style to the image selection.
+  drupal_add_css(drupal_get_path('module', 'dynamic_background_user') . '/css/dynamic_background_user.admin.css', 'module');
+  drupal_add_js(drupal_get_path('module', 'dynamic_background_user') . '/js/dynamic_background_user.js', 'module');
+
+  return $form;
+}
+
+/**
+ * Submit handler for user background selection and saves the selected image's
+ * id into the database.
+ */
+function dynamic_background_user_form_submit($form, &$form_state) {
+  // Check if any image have been selected.
+  $image_id = NULL;
+  foreach ($form_state['values']['dynamic_background'] as $key => $value) {
+    if ($value['selected']) {
+      $image_id = $key;
+      break;
+    }
+  }
+
+  // If image was selected insert the image id into the database.
+  if (!is_null($image_id)) {
+    if (dynamic_background_user_get_image_id($form_state['values']['uid'])) {
+      db_query('UPDATE {dynamic_background_user} SET  data = %d WHERE uid = %d', $image_id, $form_state['values']['uid']);
+    }
+    else {
+      db_query('INSERT INTO {dynamic_background_user} VALUES (%d, %d)', $form_state['values']['uid'], $image_id);
+    }
+  }
+  else {
+    db_query('DELETE FROM {dynamic_background_user} WHERE uid=%d', $form_state['values']['uid']);
+  }
+}
+
+/**
+ * Helper function that checks if the current user has selected a image, if a
+ * selection is found in the database the image id is returned, if not NULL is
+ * returned.
+ *
+ * @param int $uid user id
+ * @return mixed image id if one is found else NULL
+ */
+function dynamic_background_user_get_image_id($uid) {
+  $result = db_query('SELECT data FROM {dynamic_background_user} WHERE uid=%d', $uid);
+  $result = db_fetch_object($result)->data;
+  if ($result) {
+    return $result;
+  }
+  return NULL;
+}
+
+
+/**
+ * Build the administration interface for dynamic background nodes and enables
+ * administrators to select which content types have enable background selection.
+ *
+ * @return array $form
+ */
+function dynamic_background_user_admin_form() {
+  $form = array(
+    '#tree' => TRUE,
+  );
+
+  // Add CSS behaviour options
+  $defaults = variable_get('dynamic_background_user_css', array());
+  $form['dynamic_background_user_css'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('CSS behaviour'),
+    '#collapsed' => FALSE,
+    '#collapsible' => TRUE,
+    '#tree' => TRUE,
+  );
+
+  $form['dynamic_background_user_css']['selector'] = array(
+    '#type' => 'textfield',
+    '#title' => t('CSS selector'),
+    '#description' => t('The CSS selector string to target with the background image e.g. body #container'),
+    '#default_value' => isset($defaults['selector']) ? $defaults['selector'] : '',
+  );
+
+  $form['dynamic_background_user_css']['css'] = array(
+    '#type' => 'textarea',
+    '#title' => t('CSS'),
+    '#description' => t('The CSS to insert with the background image e.g background-size: cover;.'),
+    '#default_value' => isset($defaults['css']) ? $defaults['css'] : '',
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Implementation of hook_preprocess_page(), which generates the correct pice of
+ * css and inserts into the $vars['styles'] array. It also creates the variable
+ * $background_user, which can be used in page.tpl.php.
+ */
+function dynamic_background_user_preprocess_page(&$vars) {
+  global $user;
+
+  // Find the selected image id.
+  $image_id = dynamic_background_user_get_image_id($user->uid);
+
+  // Generate the css based in the image id.
+  if (!is_null($image_id)) {
+    $backgrounds = variable_get('dynamic_background_images', array());
+    if (isset($backgrounds[$image_id])) {
+      $css = dynamic_background_create_css($backgrounds[$image_id]['default'], 'dynamic_background_user_css');
+      if ($css) {
+        $vars['styles'] .= '<style type="text/css">' . $css . '</style>';
+      }
+      $vars['background_user'] = 'style="background-image: url(\'/' . $backgrounds[$image_id]['default'] . '\')"';
+    }
+  }
+}
