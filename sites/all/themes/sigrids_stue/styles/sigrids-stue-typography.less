@@ -153,62 +153,58 @@ li a.active {
 
 /* ----- / Menus ----- */
 
-#left .menu a {
-  line-height: 100%;
-}
-
-#left .menu li a {
-  color: #fff;
-  font: @fontsize-default * 1.5 "BebasNeueRegular",Arial,sans-serif;
-  text-transform: uppercase;
-}
-
-#left .menu li a {
-  .background-black(0.75);
-  border: 0;
-}
-
-#left .menu li a.active,
-#left .menu li a.active-trail {
-  color: @linkcolor-menu;
-  font-size: @fontsize-default * 2;
-}
-
-#left .menu li a:hover,
-#left .menu li a:focus {
-  .background-black(0.85);
-  color: #fff;
-  font-size: @fontsize-default * 1.75;
-  text-decoration: none;
-  .transition-font-size();
-}
-
-#left .menu li a:focus {
-  color: @linkcolor-menu;
-}
-
-#left .menu li a.active:hover,
-#left .menu li a.active-trail:hover {
-  .background-black(0.85);
-  color: @linkcolor-menu;
-  font-size: @fontsize-default * 2;
-}
-
-#left .menu li li a.active {
-  .background-black(0.75);
-}
-
-#left .menu li li a,
-#left .menu li li a.active,
-#left .menu li li a.active-trail {
-  font-size: @fontsize-default * 1.25;
-}
-
-#left .menu li li a:hover,
-#left .menu li li a:focus,
-#left .menu li li a.active:hover,
-#left .menu li li a.active-trail:hover {
-  font-size: @fontsize-default * 1.35;
+#left .menu {
+  li {
+    a {
+      .background-black(0.75);
+      border: 0;
+      color: #fff;
+      font: @fontsize-default * 1.5 "BebasNeueRegular",Arial,sans-serif;
+      line-height: 100%;
+      text-transform: uppercase;
+      &:hover,
+      &:focus {
+        .background-black(0.8);
+        color: #fff;
+        font-size: @fontsize-default * 2;
+        text-decoration: none;
+        .transition-font-size();
+      }    
+    }
+    a.active,
+    a.active-trail,
+    a.active.active-trail {
+      .background-black(0.8);
+      color: #ffc6ff;
+      font-size: @fontsize-default * 2;
+      &:hover,
+      &:focus {
+        font-size: @fontsize-default * 2;
+      }
+    }   
+    li {
+      a,
+      a.active,
+      a.active-trail,
+      a.active.active-trail {
+        font-size: @fontsize-default * 1.25;
+        .background-black(0.80);
+        &:hover,
+        &:focus {
+          font-size: @fontsize-default * 1.35;
+          .transition-font-size();
+        }
+      }
+      a.active.active-trail {
+        color: @linkcolor-menu;
+        font-size: @fontsize-default * 1.35;
+        &:hover,
+        &:focus {
+          font-size: @fontsize-default * 1.35;  
+        }        
+      }      
+    }
+  }
 }
 
 /* !----- / Secondary menu and language switch ----- */
