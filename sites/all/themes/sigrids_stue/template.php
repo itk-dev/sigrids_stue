@@ -40,6 +40,9 @@ function sigrids_stue_preprocess_page(&$vars) {
 
   global $theme_info;
 
+  // Add Google Apps verification
+  drupal_set_html_head('<meta name="google-site-verification" content="YGEy5EFD77DfoXXPsbp5Oal03Sweh6FHkFtiErzahbs" />');
+  
   // Add IE 8 meta tag.
   drupal_set_html_head('<meta http-equiv="x-ua-compatible" content="IE=8">');
   // Make sure $head is updated in page.tpl.php see: http://api.drupal.org/api/drupal/includes--common.inc/function/drupal_set_html_head/6#comment-4614.
