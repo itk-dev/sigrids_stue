@@ -57,8 +57,6 @@ function dynamic_background_admin_images_validate($form, &$form_state) {
     'file_validate_extensions' => array($settings['extensions']),
   );
 
-  // Check that only one image is selected as active (use).
-
   // Loop through all uploaded files.
   if (!empty($_FILES)) {
     foreach ($_FILES['files']['name'] as $file_field => $val) {

@@ -133,10 +133,10 @@ function dynamic_background_user_form_submit($form, &$form_state) {
 function dynamic_background_user_get_image_id($uid) {
   $result = db_query('SELECT data FROM {dynamic_background_user} WHERE uid=%d', $uid);
   $result = db_fetch_object($result)->data;
-  if ($result) {
-    return $result;
+  if ($result === FALSE) {
+    return NULL;
   }
-  return NULL;
+  return $result;
 }
 
 

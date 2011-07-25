@@ -25,6 +25,13 @@ background you can use CSS selectors to ensure, if no image is selected in the
 node, that the module falls back to the one selected in the administration
 interface.
 
+Release 1.3
+-----------
+The release enables users to select one of the uploaded background images on a
+tab in their user profile. The selected background will then be used when the
+user is logged into the site. This extension uses CSS selectors to target the
+right HTML element(s) with the user selected background image.
+
 Requirements
 ------------
 This module requires imagecache (http://www.drupal.org/project/imagecache) to 

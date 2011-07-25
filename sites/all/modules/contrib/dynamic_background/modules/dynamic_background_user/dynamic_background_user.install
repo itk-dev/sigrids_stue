@@ -54,3 +54,12 @@ function dynamic_background_user_uninstall() {
   // Remove settings.
   variable_del('dynamic_background_user');
 }
+
+/**
+ * Update module weight to handle modules as less.
+ */
+function dynamic_background_user_update_6001() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {system} SET weight = 230 WHERE type = 'module' AND name = 'dynamic_background_user'");
+  return $ret;
+}
