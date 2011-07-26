@@ -81,6 +81,12 @@
     </div>
   </div>
 
+  <?php
+    if ($node->field_credit[0]['value'] != '') {
+      print '<div id="credit">' . $node->field_credit[0]['value'] . '</div>';
+    }
+  ?>    
+    
   <?php print $closure ?>
   </body>
 </html>
