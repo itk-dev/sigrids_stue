@@ -80,7 +80,8 @@
         if (breadcrumb.length > 0) {
           var trail = $(settings.trail);
           trail.empty();
-          for (var key in breadcrumb) {
+          var numberOfCrumbs = breadcrumb.length;
+          for (var key = 0; key < numberOfCrumbs; key++) {
             if (breadcrumb[key]) {
               // We don't use the $().clone() method here because of an
               // IE & jQuery 1.2 bug.
