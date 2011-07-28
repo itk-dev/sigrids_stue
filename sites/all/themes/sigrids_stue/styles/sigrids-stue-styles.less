@@ -613,3 +613,25 @@ ul.tabs.secondary {
   .background-white(.75);
   margin: 0;
 }
+
+img#expando {
+display: none;
+position: absolute;
+z-index: 1;
+-ms-interpolation-mode: bicubic;
+}
+
+.wide img#expando,
+.tall img#expando {
+display: block;
+}
+
+.wide img#expando {
+height: auto;
+width: 100%;
+}
+
+.tall img#expando {
+height: 100%;
+width: auto;
+}
