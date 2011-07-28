@@ -26,7 +26,7 @@ ie stylesheets[if IE 7][all][] = styles/sigrids-stue-ie7.less
 ;--------------------- scripts ------------------------------
 scripts[] = scripts/jquery.example.min.js
 scripts[] = scripts/common.js
-scripts[] = scripts/flexi-background-jquery.js
+;scripts[] = scripts/flexi-background-jquery.js
 
 ;Panels layouts
 plugins[panels][layouts] = templates/layouts
