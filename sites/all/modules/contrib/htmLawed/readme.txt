@@ -1,7 +1,7 @@
 $Id: readme.txt,v 1.5.2.3.2.4 2011/02/18 02:38:05 patnaik Exp $
 
-htmLawed Drupal 6.x module
-==========================
+htmLawed Drupal 6.x module, version 2
+=====================================
 
     GPL v3 license
     Copyright Santosh Patnaik, MD, PhD
@@ -9,6 +9,8 @@ htmLawed Drupal 6.x module
 
 About the module
 ----------------
+
+    NOTE: There is a newer, version 3 of the module. Check on drupal.org.
 
     The htmLawed Drupal module enables the use of the htmLawed (X)HTML filter/purifier in Drupal. Unlike Drupal's HTML filter, htmLawed allows fine control on the HTML markup (e.g., restricting URLs by protocols and limiting element attributes), balances tags, beautifies HTML code, etc. Unlike filters like HTMLPurifier or HTML Tidy, the single-file htmLawed is much faster, more customizable, uses 10-20x less memory, is 10-20x smaller, works with PHP 4, covers all HTML markup, and does not require an external library or PHP extension.
 

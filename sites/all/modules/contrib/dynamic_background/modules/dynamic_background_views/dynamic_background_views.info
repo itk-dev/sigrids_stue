@@ -1,0 +1,15 @@
+name = Dynamic background views
+description = Enable views to use dynamic background image for each display.
+package = Dynamic background
+core = 6.x
+version = 6.x-1.6-beta2
+dependencies[] = imagecache
+dependencies[] = dynamic_background
+dependencies[] = views
+
+; Information added by drupal.org packaging script on 2012-02-19
+version = "6.x-1.9"
+core = "6.x"
+project = "dynamic_background"
+datestamp = "1329646542"
+

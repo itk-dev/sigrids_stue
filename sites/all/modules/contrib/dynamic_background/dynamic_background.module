@@ -65,19 +65,61 @@ function dynamic_background_menu() {
 }
 
 /**
- * Helper function that creates a CSS selector based on user supplied css.
+ * Helper function that creates CSS based on user supplied css.
  *
- * @param string $image
+ * @param array $images_conf
+ * @param boolean $reset optional
  * @return string $css or FALSE if custom CSS have not been defined
  */
-function dynamic_background_create_css($image, $conf = 'dynamic_background_css') {
-  $css = FALSE;
-  $css_options = variable_get($conf, array());
-  if (!empty($css_options['selector'])) {
-    $css = $css_options['selector'] . " {
-      background-image: url('" . file_create_url($image) . "');
-      " . $css_options['css'] . "
-    }";
+function dynamic_background_create_css($images_conf, $reset = FALSE) {
+  static $css;
+  if (!isset($css) || $reset) {
+    // Build style array based on weight, this will allow weight base override
+    // at the same time allowing different selectors.
+    $style_array = array();
+    foreach ($images_conf as $image_conf) {
+      // Only use image if css behaviour have be set.
+      if (!empty($image_conf['configuration'])) {
+        // Add imagecache preset, if one have been defined.
+        $image = $image_conf['image'];
+        if (isset($image_conf['imagecache']) && $image_conf['imagecache']) {
+          // Imagecache preset found, so update the image path with a
+          // imagecache based one.
+          $image = imagecache_create_path($image_conf['imagecache'], $image);
+        }
+
+        // Check if selector have been used, if it have and has a higher weight
+        // override it.
+        if (isset($style_array[$image_conf['configuration']['selector']])) {
+          if ($style_array[$image_conf['configuration']['selector']]['weight'] < $image_conf['weight']) {
+            // This css selector have been used before and the new whan was
+            // fater, so override the select in the style array.
+            $style_array[$image_conf['configuration']['selector']] = array(
+              'css' => $image_conf['configuration']['css'],
+              'image' => $image,
+              'weight' => $image_conf['weight'],
+            );
+          }
+        }
+        else {
+          // This selector have not been used before, so add it to the array.
+          $style_array[$image_conf['configuration']['selector']] = array(
+            'css' => $image_conf['configuration']['css'],
+            'image' => $image,
+            'weight' => $image_conf['weight'],
+          );
+        }
+      }
+    }
+
+    // Build css based on weighted style array.
+    $css = '';
+    foreach ($style_array as $selector => $style) {
+      $css .= $selector . " {
+        background-image: url('" . file_create_url($style['image']) . "');
+        " . $style['css'] . "
+      }\n";
+    }
   }
 
   return $css;
@@ -89,13 +131,17 @@ function dynamic_background_create_css($image, $conf = 'dynamic_background_css')
  *
  */
 function dynamic_background_preprocess_page(&$vars) {
-  $background = variable_get('dynamic_background_active', NULL);
-  if (isset($background)) {
-    $css = dynamic_background_create_css($background);
+  // Load image configuration.
+  $images_conf = dynamic_background_load_image_configuration($vars);
+
+  // Generate the css and add it to the site.
+  if (isset($images_conf)) {
+    $css = dynamic_background_create_css($images_conf);
     if ($css) {
       $vars['styles'] .= '<style type="text/css">' . $css . '</style>';
     }
-    $vars['background'] = 'style="background-image: url(\'/' . $background . '\')"';
+    $image = array_pop($images_conf);
+    $vars['background'] = 'style="background-image: url(\'' . file_create_url($image['image']) . '\')"';
   }
 }
 
@@ -104,8 +150,196 @@ function dynamic_background_preprocess_page(&$vars) {
  * background image. The callback is /background.css.
  */
 function dynamic_background_css() {
-  $background = variable_get('dynamic_background_active', NULL);
-  if (isset($background)) {
-    echo 'body, body.admin { background-image: url("/' . $background . '"); }';
+  // Load image configuration.
+  $images_conf = dynamic_background_load_image_configuration($vars);
+
+  // Generate the css and add it to the site.
+  if (isset($images_conf)) {
+    $css = dynamic_background_create_css($images_conf);
+    if ($css) {
+      echo $css;
+    }
   }
+}
+
+
+/**
+ * Implementation of hook_dynamic_background_css().
+ */
+function dynamic_background_dynamic_background_css($vars) {
+  $image = variable_get('dynamic_background_active', FALSE);
+  $imagecache = variable_get('dynamic_background_imagecache', FALSE);
+  if ($image) {
+    return array(
+      'image' => $image,
+      'configuration' => variable_get('dynamic_background_css', array()),
+      'imagecache' => $imagecache ? $imagecache['present'] : FALSE,
+      'weight' => 200,
+    );
+  }
+}
+
+/**
+ * Builds the CSS behaviour part of the form, this should be used by every
+ * sub-module. The parameter is the variable name in which the css behaviour is
+ * stored.
+ *
+ * @param string $form_key
+ * @return array $form
+ */
+function dynamic_background_css_behaviour_form($form_key) {
+  $form = array();
+
+  // Add CSS behaviour options
+  $default = variable_get($form_key, array());
+  $form[$form_key] = array(
+    '#type' => 'fieldset',
+    '#title' => t('CSS behaviour'),
+    '#collapsed' => FALSE,
+    '#collapsible' => TRUE,
+    '#tree' => TRUE,
+  );
+
+  $form[$form_key]['selector'] = array(
+    '#type' => 'textfield',
+    '#title' => t('CSS selector'),
+    '#required' => TRUE,
+    '#description' => t('The CSS selector string to target with the background image e.g. body #container.'),
+    '#default_value' => isset($default['selector']) ? $default['selector'] : '',
+  );
+
+  $form[$form_key]['css'] = array(
+    '#type' => 'textarea',
+    '#title' => t('CSS'),
+    '#description' => t('The CSS to insert with the background image e.g background-size: cover;.'),
+    '#default_value' => isset($default['css']) ? $default['css'] : '',
+  );
+
+  return $form;
+}
+
+/**
+ * Build the imagecahce present selection form, which can be used in sub-modules
+ * to add support for image manipulation.
+ *
+ * @param type $form_key
+ * @return type
+ */
+function dynamic_background_image_presents_form($form_key) {
+  $form = array();
+
+  $form[$form_key] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Imagecache preset'),
+    '#description' => 'You can apply differect effects to your background image using imagecahce presets. If you don\'t want to add effects to the selected background image, just select "No preset".',
+    '#collapsed' => FALSE,
+    '#collapsible' => TRUE,
+    '#tree' => TRUE,
+  );
+
+  // Get imagechache presets information, there will a least be one as this
+  // module have implemented on for background image thumbnails.
+  $options = array(0 => t('No preset'));
+  $presets = imagecache_presets(TRUE);
+  foreach ($presets as $id => $preset) {
+    $options[$preset['presetname']] = $preset['presetname'];
+  }
+
+  // Load default form values (current selected image present)
+  $default = variable_get($form_key, array());
+  $form[$form_key]['present'] = array(
+    '#type' => 'select',
+    '#title' => t('Choose a preset to apply to background images.'),
+    '#description' => t('To create am imagecache preset, go to <a href="@url">image cache settings</a>.', array('@url' => '/admin/build/imagecache/list')),
+    '#options' => $options,
+    '#default_value' => isset($default['present']) ? $default['present'] : 0,
+  );
+
+  return $form;
+}
+
+/**
+ * Helper function that calls hook_dynamic_background_css() and sorts the
+ * returned image configurations based on weight. This function may be called
+ * by more then one preprocessor function, so a static cache applied.
+ *
+ * @staticvar type $images
+ * @param type $reset
+ * @return type
+ */
+function dynamic_background_load_image_configuration(&$vars, $reset = FALSE) {
+  static $images;
+  if (!isset($images) || $reset) {
+    // If images is null, create empty array (as no images may be selected).
+    if (is_null($images)) {
+      $images = array();
+    }
+
+    // Implementation of hook_dynamic_background_css().
+    foreach (module_implements('dynamic_background_css') as $module) {
+      $function = $module . '_dynamic_background_css';
+      $result = $function($vars);
+      if ($result && is_array($result)) {
+        $images[$module] = $result;
+      }
+    }
+
+    // Sort images based on weight and get images with highest weight.
+    usort($images, '_dynamic_background_cmp');
+  }
+
+  return $images;
+}
+
+/**
+ * Helper function to sort image configuration arrays based on module weight.
+ *
+ * @param array $a
+ * @param array $b
+ * @return int
+ */
+function _dynamic_background_cmp($a, $b) {
+ if ($a['weight'] == $b['weight']) {
+   return 0;
+ }
+ return ($a['weight'] < $b['weight']) ? -1 : 1;
+}
+
+/**
+ * Builds image selection part of a form to be used by sub-moduels, where the
+ * user may select background images.
+ *
+ * @param int $selected_image_id
+ * @return array $form
+ */
+function dynamic_background_image_selector_form($selected_image_id) {
+  $form = array(
+    '#tree' => TRUE,
+  );
+
+  // Get all uploaded images
+  $images = variable_get('dynamic_background_images', array());
+  foreach ($images as $id => $image) {
+    if (!empty($image['default'])) {
+      // Create image thumbnail.
+      $picture = theme('imagecache', 'dynamic_background_thumb', $image['default'], basename($image['default']), basename($image['default']), NULL);
+      $form[$id]['image'] = array(
+        '#value' => $picture,
+        '#prefix' => '<div class="dynamic-background-picture">',
+      );
+
+      $form[$id]['selected'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Use background'),
+        '#default_value' => (!is_null($selected_image_id) && $id == $selected_image_id) ? 1 : 0,
+        '#suffix' => '</div>',
+      );
+    }
+  }
+
+  // Add some default styling to the image selector.
+  drupal_add_css(drupal_get_path('module', 'dynamic_background') . '/css/dynamic_background.theme.css', 'module');
+  drupal_add_js(drupal_get_path('module', 'dynamic_background') . '/js/dynamic_background_selector.js', 'file');
+
+  return $form;
 }

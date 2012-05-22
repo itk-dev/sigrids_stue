@@ -39,8 +39,11 @@ function dynamic_background_theme() {
  *
  */
 function theme_background_upload_form($element) {
+  $output = '<div class="background-upload-form">';
+  $output .= $element['#children'];
+  $output .= '</div>';
   // Style the elements as one form element
-  return theme('form_element', $element, '<div class="background-upload-form">'. $element['#children'] .'</div>');
+  return theme('form_element', $element, $output);
 }
 
 /**
@@ -64,7 +67,7 @@ function dynamic_background_upload_form_process($element, $form_state) {
   // If image is already uploaded.
   if (isset($element['#value']['default'])) {
     // Create image preview thumbnail, using imagecache.
-    $picture = theme('imagecache', 'dynamic_background_thumb', $element['#value']['default'], t('Image preview'), t('Image preview'), NULL);
+    $picture = theme('imagecache', 'dynamic_background_thumb', $element['#value']['default'], basename($element['#value']['default']), basename($element['#value']['default']), NULL);
     $element['current_picture'] = array(
       '#value' => $picture
     );

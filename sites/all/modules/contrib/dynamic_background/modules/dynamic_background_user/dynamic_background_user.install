@@ -53,6 +53,7 @@ function dynamic_background_user_uninstall() {
 
   // Remove settings.
   variable_del('dynamic_background_user');
+  variable_del('dynamic_background_user_imagecache');
 }
 
 /**

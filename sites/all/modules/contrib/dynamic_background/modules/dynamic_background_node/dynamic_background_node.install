@@ -71,4 +71,5 @@ function dynamic_background_node_uninstall() {
 
   // Remove settings.
   variable_del('dynamic_background_node');
+  variable_del('dynamic_background_node_imagecache');
 }

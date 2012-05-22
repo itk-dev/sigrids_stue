@@ -1,0 +1,122 @@
+<?php
+
+/**
+ * @file
+ * This module implements the views extension for dynamic background.
+ */
+
+/**
+ * Implementation of hook_perm().
+ */
+function dynamic_background_views_perm() {
+  return array(
+     'dynamic background views configure',
+     'user selection of background'
+    );
+}
+
+/**
+ * Implementation of hook_menu(). Hooks into the profile with a "My background"
+ * tab, where users can select one of the backgrounds.
+ *
+ * @return array menu items
+ */
+function dynamic_background_views_menu() {
+  $items = array();
+
+  $items['admin/build/backgrounds/views'] = array(
+    'title' => 'Views',
+    'description' => t('Configure views dynamic background'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dynamic_background_views_admin_form'),
+    'access arguments' => array('dynamic background views configure'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -10,
+  );
+
+  return $items;
+}
+
+/**
+ * Build the administration interface for dynamic background nodes and enables
+ * administrators to select which content types have enable background selection.
+ *
+ * @return array $form
+ */
+function dynamic_background_views_admin_form() {
+  $form = array(
+    '#tree' => TRUE,
+  );
+
+  // Add imagecache present to the form.
+  $form += dynamic_background_image_presents_form('dynamic_background_views_imagecache');
+
+  // Add css behaviour form to the form.
+  $form += dynamic_background_css_behaviour_form('dynamic_background_views_css');
+
+  return system_settings_form($form);
+}
+
+/**
+ * Implementation of hook_views_api().
+ */
+function dynamic_background_views_views_api() {
+  return array(
+    'api' => 2.0,
+    'path' => drupal_get_path('module', 'dynamic_background_views') . '/views',
+  );
+}
+
+/**
+ * Helper function that loads a dynamic background image base on a view id. The
+ * id is a combination of the view name underscore view display name.
+ *
+ * @param string $view_id
+ * @return string image id
+ */
+function dynamic_background_views_get_image_id($view_id) {
+  $result = db_query('SELECT data FROM {dynamic_background_views} WHERE view_id=\'%s\'', $view_id);
+  $result = db_fetch_object($result)->data;
+  if ($result === FALSE) {
+    return NULL;
+  }
+  return $result;
+}
+
+/**
+ * Implements hook_dynamic_background_css().
+ */
+function dynamic_background_views_dynamic_background_css($vars) {
+  // If the current page is a view, try to use dynamic background.
+  $image_id = NULL;
+  if ($page_view = views_get_page_view()) {
+    $view = $page_view->handlers['field']['title']->view;
+    $view_id = $view->name . '_' . $view->current_display;
+    $image_id = dynamic_background_views_get_image_id($view_id);
+  }
+
+  // Load imagecache settings.
+  $imagecache = variable_get('dynamic_background_views_imagecache', FALSE);
+
+  // Generate the css based in the image id.
+  if (!is_null($image_id)) {
+    $backgrounds = variable_get('dynamic_background_images', array());
+    if (isset($backgrounds[$image_id])) {
+      return array(
+        'image' => $backgrounds[$image_id]['default'],
+        'configuration' => variable_get('dynamic_background_views_css', array()),
+        'imagecache' => $imagecache ? $imagecache['present'] : FALSE,
+        'weight' => 215,
+      );
+    }
+  }
+}
+
+/**
+ * Implementation of hook_preprocess_views_ui_edit_view().
+ */
+function dynamic_background_views_preprocess_views_ui_edit_view() {
+  // Add some default styling to the image selector. It's done this way because
+  // the tab in views is load via ajax, henc the normal css is not applied.
+  drupal_add_css(drupal_get_path('module', 'dynamic_background_views') . '/css/dynamic_background.admin.css', 'module');
+}
