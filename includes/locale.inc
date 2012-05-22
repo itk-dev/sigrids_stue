@@ -1293,13 +1293,10 @@ function _locale_import_one_string($op, $value = NULL, $mode = NULL, $lang = NUL
           // data untouched or if we don't have an existing plural formula.
           $header = _locale_import_parse_header($value['msgstr']);
 
-          // Get the plural formula and update in database.
+          // Get and store the plural formula if available.
           if (isset($header["Plural-Forms"]) && $p = _locale_import_parse_plural_forms($header["Plural-Forms"], $file->filename)) {
             list($nplurals, $plural) = $p;
             db_query("UPDATE {languages} SET plurals = %d, formula = '%s' WHERE language = '%s'", $nplurals, $plural, $lang);
-          }
-          else {
-            db_query("UPDATE {languages} SET plurals = %d, formula = '%s' WHERE language = '%s'", 0, '', $lang);
           }
         }
         $headerdone = TRUE;
@@ -2598,20 +2595,21 @@ function _locale_batch_build($files, $finished = NULL, $components = array()) {
     $operations = array();
     foreach ($files as $file) {
       // We call _locale_batch_import for every batch operation.
-      $operations[] = array('_locale_batch_import', array($file->filename));    }
-      $batch = array(
-        'operations'    => $operations,
-        'title'         => $t('Importing interface translations'),
-        'init_message'  => $t('Starting import'),
-        'error_message' => $t('Error importing interface translations'),
-        'file'          => './includes/locale.inc',
-        // This is not a batch API construct, but data passed along to the
-        // installer, so we know what did we import already.
-        '#components'   => $components,
-      );
-      if (isset($finished)) {
-        $batch['finished'] = $finished;
-      }
+      $operations[] = array('_locale_batch_import', array($file->filename));
+    }
+    $batch = array(
+      'operations'    => $operations,
+      'title'         => $t('Importing interface translations'),
+      'init_message'  => $t('Starting import'),
+      'error_message' => $t('Error importing interface translations'),
+      'file'          => './includes/locale.inc',
+      // This is not a batch API construct, but data passed along to the
+      // installer, so we know what did we import already.
+      '#components'   => $components,
+    );
+    if (isset($finished)) {
+      $batch['finished'] = $finished;
+    }
     return $batch;
   }
   return FALSE;
