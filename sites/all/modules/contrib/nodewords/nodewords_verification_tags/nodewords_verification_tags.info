@@ -1,5 +1,5 @@
-name = Extra meta tags
-description = Define extra meta tags for Drupal pages.
+name = Site verification meta tags
+description = Define site verification meta tags required by some web sites (mainly from search engines) to verify a web site.
 package = Meta tags
 core = 6.x
 dependencies[] = nodewords

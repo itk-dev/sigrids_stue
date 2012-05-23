@@ -1,5 +1,5 @@
-name = Basic meta tags
-description = Define basic meta tags for Drupal pages.
+name = Administration interface for Nodewords
+description = Administration interface for Nodewords.
 package = Meta tags
 dependencies[] = nodewords
 core = 6.x

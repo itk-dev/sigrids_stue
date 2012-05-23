@@ -1,14 +1,8 @@
 <?php
-// $Id$
 
 /**
  * @file
  * Integration file for image.module.
- */
-
-/**
- * @addtogroup nodewords
- * @{
  */
 
 /**
@@ -21,13 +15,9 @@ function image_nodewords_type_id(&$result, $arg) {
       $result['type'] = NODEWORDS_TYPE_VOCABULARY;
       $result['id'] = variable_get('image_gallery_nav_vocabulary', 0);
     }
-    elseif (isset($arg[2]) && is_numeric($arg[2])) {
+    elseif (is_numeric($arg[2])) {
       $result['type'] = NODEWORDS_TYPE_TERM;
       $result['id'] = $arg[1];
     }
   }
 }
-
-/**
- * @} End of "addtogroup nodewords".
- */
